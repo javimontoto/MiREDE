@@ -1,23 +1,74 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg fixed-top navbar-dark bg-primary">
 	<div class="container">
-		<a class="navbar-brand" href="#">MiREDE</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+		<a class="navbar-brand" href="#">{{title}}</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="navbarColor01">
-			<ul class="navbar-nav mr-auto">
+		<div class="collapse navbar-collapse" id="navbarResponsive">
+			<ul class="nav navbar-nav ml-auto" *ngIf='identity'>
 				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['login']">Login</a>
+					<a class="nav-link" [routerLink]="['home']">
+						<span class="fas fa-home"></span>
+						Inicio
+					</a>
 				</li>
-				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['register']">Register</a>
+				<li class="nav-item">
+					<a class="nav-link" href="#">
+						<span class="fas fa-users"></span>
+						Gente
+					</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">
+						<span class="fas fa-list-ul"></span>
+						Timeline
+					</a>
+				</li>
+
+				<li class="divider"></li>
+
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+						{{identity.name}}
+						<span class="caret"></span>
+					</a>
+
+					<div class="dropdown-menu">
+						<a class="dropdown-item" href="#">
+							<span class="far fa-user-circle"></span>
+							Mi perfil
+						</a>
+						<a class="dropdown-item" href="#">
+							<span class="fas fa-clipboard-list"></span>
+							Mis datos
+						</a>
+						<div class="dropdown-divider"></div>
+						<a class="dropdown-item" (click)="logout()">
+							<span class="fas fa-sign-out-alt"></span>
+							Cerrar sesión
+						</a>
+					</div>
 				</li>
 			</ul>
-			<form class="form-inline my-2 my-lg-0">
+			<!-- <form class="form-inline my-2 my-lg-0">
 				<input class="form-control mr-sm-2" type="text" placeholder="Search">
 				<button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
-			</form>
+			</form> -->
+			<ul class="nav navbar-nav ml-auto" *ngIf='!identity'>
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['login']">
+						<span class="fas fa-sign-in-alt"></span>
+						Login
+					</a>
+				</li>
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['register']">
+						<span class="fas fa-user-plus"></span>
+						Register
+					</a>
+				</li>
+			</ul>
 		</div>
 	</div>
 </nav>

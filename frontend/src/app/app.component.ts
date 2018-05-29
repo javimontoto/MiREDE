@@ -11,6 +11,4 @@ declare var $:any;
 })
 
 export class AppComponent {
-  title = 'Red Social de JMU';
-  description = 'Curso de introducción';
 }

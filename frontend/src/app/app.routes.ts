@@ -4,13 +4,15 @@ import { Routes, RouterModule } from '@angular/router';
 // Importar componentes
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
+import { HomeComponent } from './components/home/home.component';
 
 
 const routes: Routes = [
-	//{path: '', component: AppComponent},		//--> página principal
+	{path: '', component: HomeComponent},		//--> página principal
+	{path: 'home', component: HomeComponent},
 	{path: 'login', component: LoginComponent},
 	{path: 'register', component: RegisterComponent},
-	//{path: '**', redirectTo:''}		//--> cuando hay un error
+	{path: '**', redirectTo:'home'}		//--> cuando hay un error
 ];
 
 export const appRoutingProviders: any[] = [];

@@ -1,4 +1,4 @@
-<div class="register-container col-lg-6 ">
+<div class="general-container col-lg-6 ">
 	<h1 class="h1-strong">{{title}}</h1>
 
 	<div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
@@ -11,7 +11,7 @@
 		inténtalo de nuevo con otros datos
 	</div>
 
-	<form #registerForm="ngForm" (ngSubmit)='onSubmit(registerForm)' class="col-lg-10">
+	<form #registerForm="ngForm" (ngSubmit)='onSubmit(registerForm)' class="col-lg-12">
 		<p>
 			<label>Nombre:</label>
 			<input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required />
@@ -52,6 +52,6 @@
 			</span>
 		</p>
 
-		<input type="submit" value="{{title}}" class="btn btn-success" [disabled]="!registerForm.form.valid" />
+		<input type="submit" value="Enviar" class="btn btn-primary" [disabled]="!registerForm.form.valid" />
 	</form>
 </div>

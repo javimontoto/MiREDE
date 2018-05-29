@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+//import { Router, ActivatedRoute, Params } from '@angular/router';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 
@@ -11,17 +11,17 @@ import { UserService } from '../../services/user.service';
 	providers  : [UserService]
 })
 export class RegisterComponent implements OnInit {
-	public title : string;
-	public user  : User;
-	public status: string;
+	public title :string;	//--> título de la sección
+	public user  :User;		//--> campos usuario que recibo
+	public status:string;	//--> estado del login
 
 	constructor(
-		private _route      : ActivatedRoute,
-		private _router     : Router,
+		//private _route      : ActivatedRoute,
+		//private _router     : Router,
 		private _userService: UserService
 		) { 
 		this.title = 'Regístrate...';
-		this.user = new User('','','','','','','ROLE_USER','');
+		this.user = new User('','','','','','','ROLE_USER','','');
 	}
 
 	ngOnInit() {

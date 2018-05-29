@@ -23,12 +23,11 @@
               "src/assets"
             ],
             "styles": [
-              "src/assets/styles.css",
-              "src/assets/bootstrap-pulse.min.css"
+              "src/assets/css/styles.css",
+              "src/assets/css/bootswatch-pulse.min.css"            
             ],
             "scripts": [
-              "node_modules/jquery/dist/jquery.min.js",
-              "node_modules/bootstrap/dist/js/bootstrap.min.js"
+              "node_modules/jquery/dist/jquery.min.js"
             ]
           },
           "configurations": {

@@ -11,15 +11,78 @@ import { GLOBAL } from './global';
 })
 export class UserService {
 	public url:string;
+	public identity
+	public token;
+	public stats;
 
 	constructor(public _http: HttpClient) { 
 		this.url = GLOBAL.url;
 	}
 
+	/** Método para REGISTRAR un usuario **/
 	register(user_to_register:User): Observable<any>{
 		let params = JSON.stringify(user_to_register);
 		let headers = new HttpHeaders().set('Content-Type', 'application/json');
 
 		return this._http.post(this.url+'register', params, {headers:headers});
+	}
+
+	/** Método para LOGIN: si llega gettoken a 'true' devuelve un hash **/
+	login(user_to_login:User, gettoken = null): Observable<any>{
+		if (gettoken != null){
+			user_to_login.gettoken = gettoken;
+		}
+
+		let params = JSON.stringify(user_to_login);
+		let headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+		return this._http.post(this.url+'login', params, {headers:headers});
+	}
+
+	/** Método para sacar los datos del usuario del LOCALSTORAGE **/
+	getIdentity(){
+		let identity = JSON.parse(localStorage.getItem('identity'));
+
+		if (identity != undefined){
+			this.identity = identity;
+		}else{
+			this.identity = null;
+		}
+		return this.identity;
+	}
+
+	/** Método para sacar el TOKEN del LOCALSTORAGE **/
+	getToken(){
+		let token = JSON.parse(localStorage.getItem('token'));
+
+		if (token != undefined){
+			this.token = token;
+		}else{
+			this.token = null;
+		}
+		return this.token;
+	}
+
+	getStats(){
+		let stats = JSON.parse(localStorage.getItem('stats'));
+
+		if(stats != undefined){
+			this.stats = stats;
+		}else{
+			this.stats = null;
+		}
+
+		return this.stats;
+	}
+
+	getCounters(user_id = null): Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());
+
+		if (user_id != null){
+			return this._http.get(this.url+'counters/'+user_id, {headers:headers});
+		}else{
+			return this._http.get(this.url+'counters', {headers:headers});
+		}
+
 	}
 }
