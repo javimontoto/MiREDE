@@ -1,0 +1,61 @@
+<div class="general-container col-lg-8 ">
+	<h1 class="h1-strong">{{title}}</h1>
+
+	<div *ngIf="users; then hay; else nohay"></div>
+	<ng-template #hay>
+		<div class="row">
+			<div class="card bg-primary col-lg-12" *ngFor="let user of users">
+				<div class="row">
+					<div class="col-lg-3">
+						<img class="card-img" src="{{ url + 'get-image-user/' + user.image }}" *ngIf="user.image" alt="Card image" />
+						<img class="card-img no-image" src="assets/images/usuario.png" *ngIf="!user.image" alt="Card image" />
+					</div>
+					<div class="card-body col-lg-9">
+						<!-- SECCIÓN FOLLOWS -->
+						<div class="follow-buttons" *ngIf=" user._id != identity._id ">
+							<button class="btn btn-success" *ngIf=" follows.indexOf(user._id) < 0"
+								(click)="followUser(user._id)">
+								<span class="fas fa-plus-square"></span>
+								Seguir
+							</button>
+							<button class="btn btn-danger" *ngIf=" follows.indexOf(user._id) >= 0"
+								(click)="deleteFollowUser(user._id)">
+								<span class="fas fa-minus-square"></span>
+								Dejar de seguir
+							</button>
+						</div>
+						<!-- FIN SECCIÓN FOLLOWS -->
+						
+						<a [routerLink]="['/user', user.id]" class="card-link">
+							<h4 class="card-title text-yellow">{{user.name +' '+ user.surname}}</h4>
+						</a>
+						<h6 class="card-subtitle mb-2 text-muted">{{user.nick}}</h6>
+						<p class="card-text text-white">Descripción</p>
+					</div>
+				</div>
+			</div>
+			<!-- PAGINACIÓN -->
+			<div class="col-lg-12">
+				<ul class="pagination center">
+					<li class="page-item" [ngClass]="{disabled : page <= 1 }">
+						<a class="page-link" [routerLink]="['/gente/', prev_page]">&laquo; Anterior</a>
+					</li>
+					<li *ngFor="let pagina of paginas" class="page-item" [routerLinkActive]="['active']">
+						<a class="page-link" [routerLink]="['/gente/', pagina+1]">{{pagina+1}}</a>
+					</li>			
+					<li class="page-item" [ngClass]="{disabled : pages == page }">
+						<a class="page-link" [routerLink]="['/gente/', next_page]">Siguiente &raquo;</a>
+					</li>
+				</ul>
+			</div>
+			<!-- FIN PAGINACIÓN -->
+		</div>
+	</ng-template>
+	<ng-template #nohay>
+		<div class="progress">
+			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" style="width: 75%"></div>
+		</div>
+	</ng-template>
+
+
+</div>

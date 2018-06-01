@@ -1,6 +1,8 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserService } from '../../services/user.service';
+import { GLOBAL } from '../../services/global';
+
 
 
 @Component({
@@ -11,6 +13,7 @@ import { UserService } from '../../services/user.service';
 })
 export class HeaderComponent implements OnInit, DoCheck {
 	public title:string;
+	public url  : string;
 	public identity;
 
 	constructor(
@@ -19,6 +22,7 @@ export class HeaderComponent implements OnInit, DoCheck {
 		private _router     : Router,
 		) {
 		this.title = "MiREDE";
+		this.url = GLOBAL.url;
 	}
 
 	ngOnInit() {

@@ -14,6 +14,18 @@
 	margin-top: 115px;
 }
 
+.text-yellow{
+	color: yellow !important;
+}
+
+.text-white{
+	color: white !important;
+}
+
+.center{
+	justify-content: center;
+}
+
 /** fin GENERALES **/
 
 
@@ -22,7 +34,6 @@
 **/
 .navbar-brand{
 	font-weight: bold;
-	color: yellow !important;
 	font-size: 2.5rem !important;
 	padding: 0 0 0 0 !important;
 }
@@ -46,6 +57,19 @@
 	font-size: 1rem !important;
 }
 
+.avatar {
+	width: 35px;
+	height: 35px;
+	border-radius: 100px;
+	overflow: hidden;
+	margin-top: 11px;
+}
+
+.avatar img{
+	height: 35px;
+	width: 35px;
+}
+
 /** fin HEADER **/
 
 
@@ -61,4 +85,30 @@
 .jumbotron {
 	background-color: #ffff0091 !important;
 }
-/** fin REGISTER **/
+/** fin HOME **/
+
+/** 
+*** USERS 
+**/
+.card {
+	margin-bottom: 20px;
+}
+
+.card-img{
+	width: 100%; 
+	display: block;
+	height: 150px; 
+	margin-bottom: 5%;
+	margin-top: 5%;
+	border-radius: 10px;
+}
+
+.no-image{
+	filter: contrast(5) !important;
+}
+
+.follow-buttons{
+	text-align: right;
+}
+
+/** fin USERS **/

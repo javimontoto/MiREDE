@@ -47,7 +47,17 @@ function saveUser(req, res){
 			]}).exec((err, users) => {
 				if(err) return res.status(500).send({message: 'Error en la petición de usuarios!!'});
 				if(users && users.length >= 1){
-					return res.status(200).send({message: 'El usuario que intenta registrar ya existe!!'});
+					users.forEach((bad_user) =>{
+						if ((bad_user.nick.toLowerCase() == user.nick.toLowerCase())&&(bad_user.email.toLowerCase() == user.email.toLowerCase())){
+							return res.status(200).send({message: 'Ya hay un usuario con nick '+user.nick+' y email '+user.email+' registrado!!!'});
+						}
+						if (bad_user.nick.toLowerCase() == user.nick.toLowerCase()){
+							return res.status(200).send({message: 'Ya hay un usuario con nick '+user.nick+' registrado!!!'});
+						}
+						if (bad_user.email.toLowerCase() == user.email.toLowerCase()){
+							return res.status(200).send({message: 'Ya hay un usuario con email '+user.email+' registrado!!!'});
+						}
+					});
 				} else {
 					// Guardamos la contraseña cifrada
 					bcrypt.hash(params.password, null, null, (err, hash) => {
@@ -132,7 +142,7 @@ function getUsers(req, res){
 		page = req.params.page;
 	}
 
-	var itemsPerPage = 10;
+	var itemsPerPage = 9;
 	User.find().sort('_id').paginate(page, itemsPerPage, (err, users, total) => {
 		if(err) return res.status(500).send({message: 'Error en la petición!!'});
 		if(!users) return res.status(404).send({message: 'No hay usuarios disponibles!!'});
@@ -140,7 +150,7 @@ function getUsers(req, res){
 		followUserIds(identity_user_id).then((value) => {
 			return res.status(200).send({
 				users : users,	// --> se puede poner solo users, pq no cambiamos el nombre
-				users_followgin : value.following,
+				users_following : value.following,
 				users_follow_me : value.followed,
 				total : total,
 				pages : Math.ceil(total/itemsPerPage)
@@ -161,12 +171,19 @@ function updateUser(req, res){
 		return res.status(500).send({message: 'NO tienes permisos para actualizar los datos del usuario!!'});
 	}
 
-	User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated) => { // con new indicamos que userUpdated sea el usuario actualizado, sino de devuelve el original
-		if(err) return res.status(500).send({message: 'Error en la petición!!'});
-		if(!userUpdated) return res.status(404).send({message: 'NO se ha podido actualizar el usuario!!'});
+	User.findOne({nick: update.nick.toLowerCase()}).exec((err, bad_user) => {
+		if(err) return res.status(500).send({message: 'Error en la comprobación de nick!!'});
+		if(bad_user){
+			return res.status(200).send({message: 'Ya hay un usuario con nick '+update.nick+' registrado!!!'});
+		}
+		
+		User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated) => { // con new indicamos que userUpdated sea el usuario actualizado, sino de devuelve el original
+			if(err) return res.status(500).send({message: 'Error en la petición!!'});
+			if(!userUpdated) return res.status(404).send({message: 'NO se ha podido actualizar el usuario!!'});
 
-		return res.status(200).send({user: userUpdated});
-	});
+			return res.status(200).send({user: userUpdated});
+		});
+	});	
 }
 
 /*** Método para subir archivos/avatar ***/

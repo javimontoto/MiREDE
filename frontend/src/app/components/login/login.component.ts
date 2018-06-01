@@ -26,9 +26,7 @@ export class LoginComponent implements OnInit {
 		this.user = new User('','','','','','','ROLE_USER','','');
 	}
 
-	ngOnInit() {
-		console.log('Componente login cargado...');
-	}
+	ngOnInit() {}
 
 	onSubmit(){
 		this._userService.login(this.user).subscribe(
@@ -36,7 +34,6 @@ export class LoginComponent implements OnInit {
 				this.identity = response.user;
 
 				if(this.identity && this.identity._id){
-					this.status = 'success';
 
 					// Persistir datos del usuario en el LocalStorage
 					localStorage.setItem('identity',JSON.stringify(this.identity));
@@ -62,7 +59,6 @@ export class LoginComponent implements OnInit {
 				this.token = JSON.stringify(response.token);
 
 				if(this.token.length > 0){
-					this.status = 'success';
 
 					// Persistir el token en el LocalStorage
 					localStorage.setItem('token',this.token);
@@ -85,7 +81,8 @@ export class LoginComponent implements OnInit {
 	getCounters(){
 		this._userService.getCounters().subscribe(
 			response => {
-				console.log(response);
+				localStorage.setItem('stats', JSON.stringify(response));
+				this.status = 'success';
 				this._router.navigate(['home']);
 
 			},

@@ -1,0 +1,59 @@
+<div class="general-container col-lg-6">
+	<h1 class="h1-strong">{{title}}</h1>
+
+	<div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		Datos actualizados correctamente!!!
+	</div>
+	<div class="alert alert-dismissible alert-danger" *ngIf="status == 'error'">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		No se ha podido actualizar tus datos!!
+	</div>
+
+	<form #userEditForm="ngForm" (ngSubmit)='onSubmit()' class="col-lg-12">
+		<p>
+			<label for="">Nombre:</label>
+			<input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required />
+			<span *ngIf="!name.valid && name.touched" class="text-danger">
+				El nombre es obligatorio!!
+			</span>
+		</p>
+		<p>
+			<label>Apellidos:</label>
+			<input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required />
+			<span *ngIf="!surname.valid && surname.touched" class="text-danger">
+				Los apellidos son obligatorios!!
+			</span>
+		</p>
+
+		<p>
+			<label>Nick:</label>
+			<input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" required />
+			<span *ngIf="!nick.valid && nick.touched" class="text-danger">
+				El nick es obligatorio!!
+			</span>
+		</p>
+
+		<p>
+			<label>Email:</label>
+			<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" required />
+			<span *ngIf="!email.valid && email.touched" class="text-danger">
+				El email es obligatorio!!
+			</span>
+		</p>
+
+		<div *ngIf="user.image">
+			<img src="{{ url + 'get-image-user/' + user.image }}" style="max-width: 20rem; max-height: 20rem;" />
+		</div>
+
+		<p>
+			<label>Avatar: </label>
+			<br>
+			<input type="file" placeholder="Subir imagen" (change)="fileChangeEvent($event)"/>
+		</p>
+
+		<input type="submit" value="{{title}}" class="btn btn-primary" [disabled]="!userEditForm.form.valid" />
+
+	</form>
+
+</div>

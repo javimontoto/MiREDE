@@ -63,6 +63,7 @@ export class UserService {
 		return this.token;
 	}
 
+	/** Método para sacar los CONTADORES almacenados**/
 	getStats(){
 		let stats = JSON.parse(localStorage.getItem('stats'));
 
@@ -75,6 +76,7 @@ export class UserService {
 		return this.stats;
 	}
 
+	/** Método que hace la petición para sacar del backend los CONTADORES **/
 	getCounters(user_id = null): Observable<any>{
 		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());
 
@@ -83,6 +85,27 @@ export class UserService {
 		}else{
 			return this._http.get(this.url+'counters', {headers:headers});
 		}
+	}
 
+	/** Método para ACTUALIZAR los datos del usuario **/
+	updateUser(user: User): Observable<any>{
+		let params = JSON.stringify(user);
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());
+
+		return this._http.put(this.url+'update-user/'+user._id, params, {headers:headers});
+	}
+
+	/** Método para sacar LISTA de USUARIOS **/
+	getUsers(page = null):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());
+
+		return this._http.get(this.url+'users/'+page, {headers:headers});
+	}
+
+	/** Método para sacar un USUARIO **/
+	getUser(id):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());
+
+		return this._http.get(this.url+'user/'+id, {headers:headers});
 	}
 }
