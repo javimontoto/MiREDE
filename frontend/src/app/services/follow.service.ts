@@ -4,7 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { Follow } from '../models/follow';
 import { GLOBAL } from './global';
 
-
 @Injectable({
 	providedIn: 'root'
 })

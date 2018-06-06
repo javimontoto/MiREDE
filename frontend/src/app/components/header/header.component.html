@@ -19,15 +19,17 @@
 						Gente
 					</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#">
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['timeline']">
 						<span class="fas fa-list-ul"></span>
 						Timeline
 					</a>
 				</li>
 
 				<li class="avatar">
-					<img src="{{ url + 'get-image-user/' + identity.image }}" *ngIf="identity && identity.image"/>
+
+					<img src="{{ url + 'get-image-user/' + identity.image }}" *ngIf="identity && identity.image" alt="Card image" />
+					<img src="assets/images/usuario.png" *ngIf="!identity.image" alt="Card image" />
 				</li>
 
 				<li class="nav-item dropdown">
@@ -37,11 +39,11 @@
 					</a>
 
 					<div class="dropdown-menu">
-						<a class="dropdown-item" href="#">
+						<a class="dropdown-item" [routerLink]="['/perfil', identity._id]">
 							<span class="far fa-user-circle"></span>
 							Mi perfil
 						</a>
-						<a class="dropdown-item" [routerLink]="['mis-datos']">
+						<a class="dropdown-item" [routerLink]="['/mis-datos']">
 							<span class="fas fa-clipboard-list"></span>
 							Mis datos
 						</a>
@@ -59,13 +61,13 @@
 			</form> -->
 			<ul class="nav navbar-nav ml-auto" *ngIf='!identity'>
 				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['login']">
+					<a class="nav-link" [routerLink]="['/login']">
 						<span class="fas fa-sign-in-alt"></span>
 						Login
 					</a>
 				</li>
 				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['register']">
+					<a class="nav-link" [routerLink]="['/register']">
 						<span class="fas fa-user-plus"></span>
 						Register
 					</a>

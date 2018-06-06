@@ -9,6 +9,7 @@ export class User{
 		public password:string,
 		public role    :string,
 		public image   :string,
+		public status  :string,
 		public gettoken:any		// gettoken no está en la bd
 		) {
 		// code...

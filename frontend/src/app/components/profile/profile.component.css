@@ -1,0 +1,73 @@
+.user-card {
+	margin-bottom: 1.2rem;
+	background-color: #ffff0091 !important;
+}
+
+.user-card .card-header{
+	background-color: #ffff008c !important;
+}
+
+.user-avatar {
+	text-align: center;
+}
+
+.user-avatar img{
+	width:100%; 
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	border-radius: 0.625rem;
+}
+
+.user-data{
+	color: #593196;
+	display: block;
+	padding-top: 1.2rem;
+}
+
+.user-data h2{
+	margin-bottom: 0;
+}
+
+.user-nick{
+	color: #9378bdd1 !important;
+	font-weight: bold;
+}
+
+.user-status{
+	min-height: 3rem;
+}
+
+.follow-buttons{
+	margin-bottom: 0.8rem;
+}
+
+.badge{
+	font-size: 0.8rem;
+	margin-top: 0.2rem;
+}
+
+.stats{
+	background-color: #593196;
+	float: left;
+	padding-top: 0.4rem;
+	padding-bottom: 0.4rem;
+	border-left: 1px solid #fffc;
+}
+
+.stats:first-child{
+	border-left: none;
+}
+
+.stats span{
+	display: block;
+	text-align: center;
+}
+
+.stats a{
+	text-decoration: none;
+	color: #fffc;
+}
+
+.publications{
+	margin-top: 5rem;
+}

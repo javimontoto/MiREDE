@@ -1,0 +1,87 @@
+<div class="section-header">
+	<h1>{{title}}</h1>
+</div>
+
+<div class="card border-primary mb-3">	
+	<div class="card-header">
+		<a [routerLink]="['/perfil', identity._id]">
+			<h3 class="text-yellow">{{identity.name +' '+ identity.surname}}</h3>
+		</a>
+	</div>
+	<div class="card-body">
+		<h5 class="card-title">{{identity.nick}}</h5>
+		<p class="lead"><em>{{identity.status}}</em></p>
+	</div>
+	<div class="card-body">
+		<img class="card-img" src="{{ url + 'get-image-user/' + identity.image }}" *ngIf="identity.image" alt="Card image" />
+		<img class="card-img no-image" src="assets/images/usuario.png" *ngIf="!identity.image" alt="Card image" />
+	</div>
+
+	<!-- Estadísticas -->
+	<div class="row" *ngIf="stats">
+		<div class="col-lg-12">
+			<div class="stats col-lg-4">
+				<a href="#">
+					<span>Siguiendo</span> 
+					<span class="text-yellow">{{stats.following}}</span>
+				</a>
+			</div>
+			<div class="stats col-lg-4">
+				<a href="#">
+					<span>Seguidores</span> 
+					<span class="text-yellow">{{stats.followed}}</span>
+				</a>
+			</div>
+			<div class="stats col-lg-4">
+				<a href="#">
+					<span>Publicaciones</span> 
+					<span class="text-yellow">{{stats.publications}}</span>
+				</a>
+			</div>
+		</div>
+	</div>
+  <!-- <div class="card-body">
+		<a href="#" class="card-link">Card link</a>
+		<a href="#" class="card-link">Another link</a>
+	</div>
+	<div class="card-footer text-muted">
+		2 days ago
+	</div> -->
+</div>
+
+<!-- Formulario de PUBLICACIONES -->
+<div class="card border-primary">
+	<h3 class="card-header">Publicar...</h3>
+	<div class="card-body">
+
+		<!-- Resultado del envío del FORMULARIO -->
+		<div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			Publicación exitosa!!!
+		</div>
+		<div class="alert alert-dismissible alert-danger" *ngIf="status == 'error'">
+			<button type="button" class="close" data-dismiss="alert">&times;</button>
+			FALLO en la publicación!!!
+		</div>
+		<!-- FIN Resultado del envío del FORMULARIO -->
+
+		<form #newPubForm="ngForm" (ngSubmit)='onSubmit(newPubForm); sendPublication($event);'>
+			<p>
+				<label>¿Qué estás pensando?</label>
+				<textarea name="text" #text="ngModel" [(ngModel)]="publication.text" class="form-control" required></textarea>
+				<span *ngIf="!text.valid && text.touched" class="text-danger">
+					El texto de la publicación es obligatorio!!
+				</span>
+			</p>
+
+			<p>
+				<label>Sube una imagen</label>
+				<input type="file" placeholder="Subir imagen" (change)="fileChangeEvent($event)"/>
+			</p>
+
+			<div class="derecha">
+				<input type="submit" value="Publicar" class="btn btn-success" [disabled]="!newPubForm.form.valid" />
+			</div>
+		</form>
+	</div>
+</div>

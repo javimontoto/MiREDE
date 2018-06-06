@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { User } from '../../models/user';
 import { Follow } from '../../models/follow';
@@ -136,4 +136,10 @@ export class UsersComponent implements OnInit {
 			);
 	}
 
+
+	// Output --> ponemos la etiqueta "@Output" y la propiedad que es el evento
+	@Output() sended = new EventEmitter();
+	sendPublication(event){
+		this.sended.emit({send:'true'});
+	}
 }

@@ -1,0 +1,13 @@
+.form-left{
+
+}
+
+.form-right{
+	text-align: center;
+	margin-top: 1rem;
+}
+
+.form-right img{
+	max-width: 20rem; 
+	max-height: 20rem;
+}

@@ -1,0 +1,34 @@
+.card-header {
+	background: #593196;
+	color: rgba(255,255,255,0.8);
+}
+
+.card-header h3{
+	float: left;
+}
+
+.card-header h5{
+	text-align: right;
+}
+
+.stats{
+	background-color: #593196;
+	float: left;
+	padding-top: 0.75rem;
+	padding-bottom: 0.75rem;
+	border-left: 1px solid #fffc;
+}
+
+.stats:first-child{
+	border-left: none;
+}
+
+.stats span{
+	display: block;
+	text-align: center;
+}
+
+.stats a{
+	text-decoration: none;
+	color: #fffc;
+}

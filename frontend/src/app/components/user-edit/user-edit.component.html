@@ -1,6 +1,9 @@
-<div class="general-container col-lg-6">
-	<h1 class="h1-strong">{{title}}</h1>
+<div class="general-container col-lg-12">
+	<div class="section-header">
+		<h1>{{title}}</h1>
+	</div>
 
+	<!-- Sección de Alertas -->
 	<div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		Datos actualizados correctamente!!!
@@ -9,50 +12,63 @@
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		No se ha podido actualizar tus datos!!
 	</div>
+	<!-- FIN Sección de Alertas -->
 
 	<form #userEditForm="ngForm" (ngSubmit)='onSubmit()' class="col-lg-12">
-		<p>
-			<label for="">Nombre:</label>
-			<input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required />
-			<span *ngIf="!name.valid && name.touched" class="text-danger">
-				El nombre es obligatorio!!
-			</span>
-		</p>
-		<p>
-			<label>Apellidos:</label>
-			<input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required />
-			<span *ngIf="!surname.valid && surname.touched" class="text-danger">
-				Los apellidos son obligatorios!!
-			</span>
-		</p>
+		<div class="row">
+			<div class="form-left col-lg-6">
+				<p>
+					<label for="">Nombre:</label>
+					<input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required />
+					<span *ngIf="!name.valid && name.touched" class="text-danger">
+						El nombre es obligatorio!!
+					</span>
+				</p>
+				<p>
+					<label>Apellidos:</label>
+					<input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required />
+					<span *ngIf="!surname.valid && surname.touched" class="text-danger">
+						Los apellidos son obligatorios!!
+					</span>
+				</p>
 
-		<p>
-			<label>Nick:</label>
-			<input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" required />
-			<span *ngIf="!nick.valid && nick.touched" class="text-danger">
-				El nick es obligatorio!!
-			</span>
-		</p>
+				<p>
+					<label>Nick:</label>
+					<input type="text" name="nick" #nick="ngModel" [(ngModel)]="user.nick" class="form-control" required />
+					<span *ngIf="!nick.valid && nick.touched" class="text-danger">
+						El nick es obligatorio!!
+					</span>
+				</p>
 
-		<p>
-			<label>Email:</label>
-			<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" required />
-			<span *ngIf="!email.valid && email.touched" class="text-danger">
-				El email es obligatorio!!
-			</span>
-		</p>
+				<p>
+					<label>Email:</label>
+					<input type="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" required />
+					<span *ngIf="!email.valid && email.touched" class="text-danger">
+						El email es obligatorio!!
+					</span>
+				</p>
 
-		<div *ngIf="user.image">
-			<img src="{{ url + 'get-image-user/' + user.image }}" style="max-width: 20rem; max-height: 20rem;" />
+				<p>
+					<label>Estado actual:</label>
+					<textarea name="status" #text="ngModel" [(ngModel)]="user.status" class="form-control" ></textarea>
+				</p>
+			</div>
+
+			<div class="form-right col-lg-6">
+				<div class="form-right" *ngIf="user.image">
+					<img src="{{ url + 'get-image-user/' + user.image }}" />
+				</div>
+				<br>
+				<div class="form-right">
+					<input type="file" placeholder="Subir imagen" (change)="fileChangeEvent($event)"/>
+				</div>
+			</div>
 		</div>
-
-		<p>
-			<label>Avatar: </label>
-			<br>
-			<input type="file" placeholder="Subir imagen" (change)="fileChangeEvent($event)"/>
-		</p>
-
-		<input type="submit" value="{{title}}" class="btn btn-primary" [disabled]="!userEditForm.form.valid" />
+		
+		<br>
+		<div class="center">
+			<input type="submit" value="Actualizar" class="btn btn-primary" [disabled]="!userEditForm.form.valid" />
+		</div>
 
 	</form>
 

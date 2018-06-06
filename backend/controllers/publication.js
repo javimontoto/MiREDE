@@ -20,13 +20,6 @@ function probando(req, res){
 function savePublication(req, res){
 	var params = req.body;
 
-	/*
-	text: String,
-	file: String,
-	created_at: String,
-	user: { type: Schema.ObjectId, ref: 'User' }
-	*/
-
 	if(!params.text) return res.status(200).send({message: 'ERROR: Debes enviar un texto'});
 	var publication = new Publication();
 	publication.text = params.text;
@@ -50,9 +43,9 @@ function getPublications(req, res){
 		page = req.params.page;
 	}
 
-	var items_per_page = 4;
+	var items_per_page = 5;
 
-	Follow.find({user: req.user.sub}).populate('followed', 'name surname _id').exec((err,follows) => {
+	Follow.find({user: req.user.sub}).exec((err,follows) => {
 		if(err) return res.status(500).send({message: 'ERROR al devolver el seguimiento!!!'});
 
 		var follows_clean = [];
@@ -60,8 +53,9 @@ function getPublications(req, res){
 		follows.forEach((follow) => {
 			follows_clean.push(follow.followed);
 		});
+		follows_clean.push(req.user.sub); // Añado también mis publicaciones
 
-		Publication.find({user: {'$in': follows_clean}}).sort('-created_at').populate('user', 'name surname _id').paginate(page, items_per_page, (err, publications, total) => {
+		Publication.find({user: {'$in': follows_clean}}).sort('-created_at').populate('user', 'name surname image _id').paginate(page, items_per_page, (err, publications, total) => {
 			if(err) return res.status(500).send({message: 'ERROR al devolver publicaciones!!!'});
 			if(total == 0) return res.status(404).send({message: 'NO hay publicaciones'});
 
@@ -69,9 +63,40 @@ function getPublications(req, res){
 				total_items: total,
 				pages: Math.ceil(total/items_per_page),
 				page: page,
+				items_per_page: items_per_page,
 				publications
 			})
 		});
+	});
+}
+
+/*** Método para devolver las publicaciones de un usuario concreto ***/
+function getPublicationsByUser(req, res){
+	var user_id;
+	var page = 1;
+
+	if(!req.params.id){
+		return res.status(500).send({message: 'ERROR al devolver publicaciones!!!'});
+	}else{
+		user_id  = req.params.id;
+	}
+	if(req.params.page){
+		page = req.params.page;
+	}
+
+	var items_per_page = 5;
+
+	Publication.find({user: user_id}).sort('-created_at').populate('user', 'name surname image _id').paginate(page, items_per_page, (err, publications, total) => {
+		if(err) return res.status(500).send({message: 'ERROR al devolver publicaciones!!!'});
+		if(total == 0) return res.status(404).send({message: 'NO hay publicaciones'});
+
+		return res.status(200).send({
+			total_items: total,
+			pages: Math.ceil(total/items_per_page),
+			page: page,
+			items_per_page: items_per_page,
+			publications
+		})
 	});
 }
 
@@ -154,6 +179,7 @@ module.exports = {
 	probando,
 	savePublication,
 	getPublications,
+	getPublicationsByUser,
 	getPublication,
 	deletePublication,
 	uploadImage,

@@ -253,18 +253,19 @@ function _handleWrapError(instance, error, name, context, args, options, callbac
 }
 
 Kareem.prototype.wrap = function(name, fn, context, args, options) {
-  var lastArg = (args.length > 0 ? args[args.length - 1] : null);
-  var argsWithoutCb = typeof lastArg === 'function' ?
+  const lastArg = (args.length > 0 ? args[args.length - 1] : null);
+  const argsWithoutCb = typeof lastArg === 'function' ?
     args.slice(0, args.length - 1) :
     args;
-  var _this = this;
+  const _this = this;
 
   options = options || {};
+  const checkForPromise = options.checkForPromise;
 
   this.execPre(name, context, args, function(error) {
     if (error) {
-      var numCallbackParams = options.numCallbackParams || 0;
-      var errorArgs = options.contextParameter ? [context] : [];
+      const numCallbackParams = options.numCallbackParams || 0;
+      const errorArgs = options.contextParameter ? [context] : [];
       for (var i = errorArgs.length; i < numCallbackParams; ++i) {
         errorArgs.push(null);
       }
@@ -272,12 +273,29 @@ Kareem.prototype.wrap = function(name, fn, context, args, options) {
         options, lastArg);
     }
 
-    var end = (typeof lastArg === 'function' ? args.length - 1 : args.length);
-    fn.apply(context, args.slice(0, end).concat(_cb));
+    const end = (typeof lastArg === 'function' ? args.length - 1 : args.length);
+    const numParameters = fn.length;
+    const ret = fn.apply(context, args.slice(0, end).concat(_cb));
+
+    if (checkForPromise) {
+      if (ret != null && typeof ret.then === 'function') {
+        // Thenable, use it
+        return ret.then(
+          res => _cb(null, res),
+          err => _cb(err)
+        );
+      }
+
+      // If `fn()` doesn't have a callback argument and doesn't return a
+      // promise, assume it is sync
+      if (numParameters < end + 1) {
+        return _cb(null, ret);
+      }
+    }
 
     function _cb() {
-      var args = arguments;
-      var argsWithoutError = Array.prototype.slice.call(arguments, 1);
+      const args = arguments;
+      const argsWithoutError = Array.prototype.slice.call(arguments, 1);
       if (options.nullResultByDefault && argsWithoutError.length === 0) {
         argsWithoutError.push(null);
       }

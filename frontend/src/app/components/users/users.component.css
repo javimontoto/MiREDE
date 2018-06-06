@@ -1,0 +1,28 @@
+.card {
+	margin-bottom: 20px;
+}
+
+.card-img{
+	width: 100%; 
+	display: block;
+	height: 150px; 
+	margin-bottom: 5%;
+	margin-top: 5%;
+	border-radius: 10px;
+}
+
+.no-image{
+	filter: contrast(5) !important;
+}
+
+.follow-buttons{
+	text-align: right;
+}
+
+.user-name{
+
+}
+
+.user-nick{
+	color: #b9b6bd !important;
+}

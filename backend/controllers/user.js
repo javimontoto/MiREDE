@@ -39,42 +39,40 @@ function saveUser(req, res){
 		user.email = params.email;
 		user.role = 'ROLE_USER';
 		user.image = null;
+		user.status = null;
 
 		// Comprobamos que no haya usuarios duplicados
-		User.find({ $or: [
-			{email: user.email.toLowerCase()},
-			{nick: user.nick.toLowerCase()}
-			]}).exec((err, users) => {
-				if(err) return res.status(500).send({message: 'Error en la petición de usuarios!!'});
-				if(users && users.length >= 1){
-					users.forEach((bad_user) =>{
-						if ((bad_user.nick.toLowerCase() == user.nick.toLowerCase())&&(bad_user.email.toLowerCase() == user.email.toLowerCase())){
-							return res.status(200).send({message: 'Ya hay un usuario con nick '+user.nick+' y email '+user.email+' registrado!!!'});
-						}
-						if (bad_user.nick.toLowerCase() == user.nick.toLowerCase()){
-							return res.status(200).send({message: 'Ya hay un usuario con nick '+user.nick+' registrado!!!'});
-						}
-						if (bad_user.email.toLowerCase() == user.email.toLowerCase()){
-							return res.status(200).send({message: 'Ya hay un usuario con email '+user.email+' registrado!!!'});
-						}
-					});
-				} else {
-					// Guardamos la contraseña cifrada
-					bcrypt.hash(params.password, null, null, (err, hash) => {
-						user.password = hash;
+		User.find({ $or: [{email: user.email.toLowerCase()},{nick: {$regex : new RegExp(user.nick, "i")}}]}).exec((err, users) => {
+			if(err) return res.status(500).send({message: 'Error en la petición de usuarios!!'});
+			if(users && users.length >= 1){
+				users.forEach((bad_user) =>{
+					if ((bad_user.nick.toLowerCase() == user.nick.toLowerCase())&&(bad_user.email.toLowerCase() == user.email.toLowerCase())){
+						return res.status(200).send({message: 'Ya hay un usuario con nick '+user.nick+' y email '+user.email+' registrado!!!'});
+					}
+					if (bad_user.nick.toLowerCase() == user.nick.toLowerCase()){
+						return res.status(200).send({message: 'Ya hay un usuario con nick '+user.nick+' registrado!!!'});
+					}
+					if (bad_user.email.toLowerCase() == user.email.toLowerCase()){
+						return res.status(200).send({message: 'Ya hay un usuario con email '+user.email+' registrado!!!'});
+					}
+				});
+			} else {
+				// Guardamos la contraseña cifrada
+				bcrypt.hash(params.password, null, null, (err, hash) => {
+					user.password = hash;
 
-						// Guardamos el usuario
-						user.save((err, userStore) => {
-							if(err) return res.status(500).send({message: 'Error al guarda el usuario'});
-							if(userStore){
-								res.status(200).send({user: userStore});
-							} else {
-								res.status(404).send({message: 'No se ha registrado el usuario'});
-							}
-						});
+					// Guardamos el usuario
+					user.save((err, userStore) => {
+						if(err) return res.status(500).send({message: 'Error al guarda el usuario'});
+						if(userStore){
+							res.status(200).send({user: userStore});
+						} else {
+							res.status(404).send({message: 'No se ha registrado el usuario'});
+						}
 					});
-				}
-			});
+				});
+			}
+		});
 	} else {
 		res.status(200).send({message: 'Envía todos los campos necesarios!!'});
 	}
@@ -92,19 +90,19 @@ function loginUser(req, res){
 		if (user){
 			bcrypt.compare(password, user.password, (err, check) => {
 				if (check){
-					if (params.gettoken){ // gettoken es un parametro (true/false) que si está a true indica que queremos el token
-						// generar y devolver token
-						return res.status(200).send({token: jwt.createToken(user)});
-					} else {
-						// devolver datos de usuario
-						user.password = undefined;
-						return res.status(200).send({user});
-					}
-
+				if (params.gettoken){ // gettoken es un parametro (true/false) que si está a true indica que queremos el token
+					// generar y devolver token
+					return res.status(200).send({token: jwt.createToken(user)});
 				} else {
-					return res.status(404).send({message: 'Email o contraseña incorrectos!!'});
+					// devolver datos de usuario
+					user.password = undefined;
+					return res.status(200).send({user});
 				}
-			});
+
+			} else {
+				return res.status(404).send({message: 'Email o contraseña incorrectos!!'});
+			}
+		});
 		} else {
 			return res.status(404).send({message: 'Email o contraseña incorrectos!!!!'});
 		}
@@ -115,7 +113,8 @@ function loginUser(req, res){
 function getUser(req, res){
 	var user_id = req.params.id;
 
-	User.findById(user_id, (err, user) => {
+	//eliminamos password al devolver el usuario
+	User.findById(user_id, '-password', (err, user) => {
 		if(err) return res.status(500).send({message: 'Error en la petición!!'});
 		if(!user) return res.status(404).send({message: 'El usuario no existe!!'});
 
@@ -128,7 +127,7 @@ function getUser(req, res){
 		});*/
 
 		followThisUser(req.user.sub, user_id).then((value) => {
-			return res.status(200).send({user, value});
+			return res.status(200).send({user, followed:value.followed, following:value.following});
 		});
 	});
 }
@@ -161,23 +160,25 @@ function getUsers(req, res){
 
 /*** Método para actualizar datos de Usuario ***/
 function updateUser(req, res){
-	var userId = req.params.id;
+	var user_id = req.params.id;
 	var update = req.body;
 
 	// borramos la propiedad de password
 	delete update.password;
 
-	if(userId != req.user.sub){
+	if(user_id != req.user.sub){
 		return res.status(500).send({message: 'NO tienes permisos para actualizar los datos del usuario!!'});
 	}
 
-	User.findOne({nick: update.nick.toLowerCase()}).exec((err, bad_user) => {
+	User.findOne({nick: { $regex : new RegExp(update.nick, "i") }},(err, bad_user) => {
 		if(err) return res.status(500).send({message: 'Error en la comprobación de nick!!'});
 		if(bad_user){
-			return res.status(200).send({message: 'Ya hay un usuario con nick '+update.nick+' registrado!!!'});
+			if(bad_user._id != user_id){
+				return res.status(200).send({message: 'Ya hay un usuario con nick '+bad_user.nick+' registrado!!!'});
+			}
 		}
 		
-		User.findByIdAndUpdate(userId, update, {new:true}, (err, userUpdated) => { // con new indicamos que userUpdated sea el usuario actualizado, sino de devuelve el original
+		User.findByIdAndUpdate(user_id, update, {new:true}, (err, userUpdated) => { // con new indicamos que userUpdated sea el usuario actualizado, sino de devuelve el original
 			if(err) return res.status(500).send({message: 'Error en la petición!!'});
 			if(!userUpdated) return res.status(404).send({message: 'NO se ha podido actualizar el usuario!!'});
 
@@ -248,8 +249,8 @@ function getCounters(req, res){
 		user_id = req.params.id;
 	}
 
-	getCountFollow(user_id).then((value) => {
-		return res.status(200).send({value});
+	getCountFollow(user_id).then((stats) => {
+		return res.status(200).send(stats);
 	});
 }
 
@@ -273,28 +274,28 @@ module.exports = {
 async function getCountFollow(user_id){
 	try{
 		var following = await Follow.count({'user':user_id}).exec()
-			.then((count) => {
-				return count;
-			})
-			.catch((err) => {
-				return handleError(err);
-			});
+		.then((count) => {
+			return count;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		var followed = await Follow.count({'followed':user_id}).exec()
-			.then((count) => {
-				return count;
-			})
-			.catch((err) => {
-				return handleError(err);
-			});
+		.then((count) => {
+			return count;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		var publications = await Publication.count({'user':user_id}).exec()
-			.then((count) => {
-				return count;
-			})
-			.catch((err) => {
-				return handleError(err);
-			});
+		.then((count) => {
+			return count;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		return {
 			following: following,
@@ -310,20 +311,20 @@ async function getCountFollow(user_id){
 async function followThisUser(identity_user_id, user_id){
 	try{
 		var following = await Follow.findOne({'user':identity_user_id, 'followed':user_id}).exec()
-			.then((following) => {
-				return following;
-			})
-			.catch((err) => {
-				return handleError(err);
-			});
+		.then((following) => {
+			return following;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		var followed = await Follow.findOne({'user':user_id, 'followed':identity_user_id}).exec()
-			.then((followed) => {
-				return followed;
-			})
-			.catch((err) => {
-				return handleError(err);
-			});
+		.then((followed) => {
+			return followed;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		return {
 			following: following,
@@ -339,32 +340,32 @@ async function followUserIds(user_id){
 	try{
 		// con select 'valor':0 lo que hago es deseleccionar ese campo
 		var followings = await Follow.find({'user':user_id}).select({'_id':0, '_v':0, 'user':0}).exec()
-			.then((followings) => {
-				var follows_clean = [];
+		.then((followings) => {
+			var follows_clean = [];
 
-				followings.forEach((follow) => {
-					follows_clean.push(follow.followed);
-				});
-
-				return follows_clean;
-			})
-			.catch((err) => {
-				return handleError(err);
+			followings.forEach((follow) => {
+				follows_clean.push(follow.followed);
 			});
+
+			return follows_clean;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		var followeds = await Follow.find({'followed':user_id}).select({'_id':0, '_v':0, 'followed':0}).exec()
-			.then((followeds) => {
-				var follows_clean = [];
+		.then((followeds) => {
+			var follows_clean = [];
 
-				followeds.forEach((follow) => {
-					follows_clean.push(follow.user);
-				});
-
-				return follows_clean;
-			})
-			.catch((err) => {
-				return handleError(err);
+			followeds.forEach((follow) => {
+				follows_clean.push(follow.user);
 			});
+
+			return follows_clean;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
 
 		return {
 			following: followings,

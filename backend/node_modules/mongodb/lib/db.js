@@ -573,7 +573,7 @@ var createCollection = function(self, name, options, callback) {
  * @param {boolean} [options.serializeFunctions=false] Serialize functions on any object.
  * @param {boolean} [options.strict=false] Returns an error if the collection does not exist
  * @param {boolean} [options.capped=false] Create a capped collection.
- * @param {boolean} [options.autoIndexId=true] Create an index on the _id field of the document, True by default on MongoDB 2.2 or higher off for version < 2.2.
+ * @param {boolean} [options.autoIndexId=true] DEPRECATED: Create an index on the _id field of the document, True by default on MongoDB 2.6 - 3.0
  * @param {number} [options.size=null] The size of the capped collection in bytes.
  * @param {number} [options.max=null] The maximum number of documents in the capped collection.
  * @param {number} [options.flags=null] Optional. Available for the MMAPv1 storage engine only to set the usePowerOf2Sizes and the noPadding flag.
@@ -593,6 +593,10 @@ Db.prototype.createCollection = function(name, options, callback) {
   if (typeof options === 'function') (callback = options), (options = {});
   options = options || {};
   options.promiseLibrary = options.promiseLibrary || this.s.promiseLibrary;
+
+  if (options.autoIndexId !== undefined) {
+    console.warn('the autoIndexId option is deprecated and will be removed in a future release');
+  }
 
   return executeOperation(this.s.topology, createCollection, [this, name, options, callback]);
 };
@@ -1035,11 +1039,18 @@ var createIndex = function(self, name, fieldOrSpec, options, callback) {
 
     // 67 = 'CannotCreateIndex' (malformed index options)
     // 85 = 'IndexOptionsConflict' (index already exists with different options)
+    // 86 = 'IndexKeySpecsConflict' (index already exists with the same name)
     // 11000 = 'DuplicateKey' (couldn't build unique index because of dupes)
     // 11600 = 'InterruptedAtShutdown' (interrupted at shutdown)
     // These errors mean that the server recognized `createIndex` as a command
     // and so we don't need to fallback to an insert.
-    if (err.code === 67 || err.code === 11000 || err.code === 85 || err.code === 11600) {
+    if (
+      err.code === 67 ||
+      err.code === 11000 ||
+      err.code === 85 ||
+      err.code === 86 ||
+      err.code === 11600
+    ) {
       return handleCallback(callback, err, result);
     }
 

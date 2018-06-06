@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
 	public title :string;	//--> título de la sección
 	public user  :User;		//--> campos usuario que recibo
 	public status:string;	//--> estado del login
+	public message;
 
 	constructor(
 		//private _route      : ActivatedRoute,
@@ -21,7 +22,7 @@ export class RegisterComponent implements OnInit {
 		private _userService: UserService
 		) { 
 		this.title = 'Regístrate...';
-		this.user = new User('','','','','','','ROLE_USER','','');
+		this.user = new User('','','','','','','ROLE_USER','','','');
 	}
 
 	ngOnInit() {
@@ -37,6 +38,7 @@ export class RegisterComponent implements OnInit {
 					form.reset();
 				}else{
 					this.status = 'error';
+					this.message = response.message;
 				}
 			},
 			error => {

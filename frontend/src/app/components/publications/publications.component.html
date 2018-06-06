@@ -1,0 +1,56 @@
+<div class="section-header">
+	<h1>{{title}}</h1>
+</div>
+
+<div *ngIf="publications; then hay; else nohay"></div>
+
+<ng-template #hay>
+	<div *ngFor="let publication of publications">
+		<div class="publication-card col-lg-12" [ngClass]='{"publication-my" : publication.user._id == identity._id}' >
+			<div class="card-header">
+				<div class="publication-avatar">
+					<img src="{{ url + 'get-image-user/' + publication.user.image }}" *ngIf="publication.user.image" alt="Card image" />
+					<img src="assets/images/usuario.png" *ngIf="!publication.user.image" alt="Card image" />
+				</div>
+				<div class="publication-user">
+					<h3>{{publication.user.name + ' ' +publication.user.surname}}</h3>
+					<small>{{ (publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo }}</small>
+				</div>
+			</div>
+			<div class="col-lg-12" *ngIf="publication.file && showImage != publication._id">
+				<div class="row">
+					<div class="card-body col-lg-8">
+						<h5 class="publication-text">{{publication.text}}</h5>
+					</div>
+					<div class="col-lg-4">
+						<img class="card-img" src="{{ url + 'get-image-pub/' + publication.file }}" alt="Card image" (click)="showThisImage(publication._id)"/>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-12" *ngIf="!publication.file || showImage == publication._id">
+				<div class="card-body col-lg-12">
+					<h5 class="publication-text">{{publication.text}}</h5>
+					<img class="card-img" src="{{ url + 'get-image-pub/' + publication.file }}" alt="Card image" *ngIf="showImage == publication._id" (click)="hideThisImage(publication._id)"/>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<p class="center">
+		<button class="btn btn-success" (click)="viewMore()" *ngIf="!noMore">
+			Ver más publicaciones
+		</button>
+	</p>
+</ng-template>
+
+<ng-template #nohay>
+	<div class="publication-card border-danger col-lg-12">
+		<div class="card-header"><h4 class="publication-user">El TIMELINE está vacío!!!</h4></div>
+		<div class="card-body">
+			<h5>Parece que este usuario no ha publicado nada todavía.</h5>
+		</div>
+	</div>
+</ng-template>
+
+

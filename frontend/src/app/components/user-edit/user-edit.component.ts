@@ -21,9 +21,9 @@ export class UserEditComponent implements OnInit {
 	public token;
 
 	constructor(
-		private _route: ActivatedRoute,
-		private _router: Router,
-		private _userService: UserService,
+		private _route        : ActivatedRoute,
+		private _router       : Router,
+		private _userService  : UserService,
 		private _uploadService: UploadService
 		) { 
 		this.title = 'Actualizar mis datos';
@@ -33,9 +33,7 @@ export class UserEditComponent implements OnInit {
 		this.url = GLOBAL.url;
 	}
 
-	ngOnInit() {
-		//console.log('user-edit.component se ha cargado');
-	}
+	ngOnInit() {}
 
 	onSubmit() {
 		this._userService.updateUser(this.user).subscribe(
@@ -48,11 +46,13 @@ export class UserEditComponent implements OnInit {
 					localStorage.setItem('identity', JSON.stringify(this.user));
 					this.identity = this.user;
 
-					this._uploadService.makeFileRequest(this.url+'upload-image-user/'+this.user._id, [], this.filesToUpload, this.token, 'image').then((result: any) => {
-						console.log(result);
-						this.user.image = result.user.image;
-						localStorage.setItem('identity', JSON.stringify(this.user));
-					});
+					if(this.filesToUpload != null){
+						this._uploadService.makeFileRequest(this.url+'upload-image-user/'+this.user._id, [], this.filesToUpload, this.token, 'image').then((result: any) => {
+							//console.log(result);
+							this.user.image = result.user.image;
+							localStorage.setItem('identity', JSON.stringify(this.user));
+						});
+					}
 				}
 			},
 			error => {

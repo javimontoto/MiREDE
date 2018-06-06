@@ -4,8 +4,6 @@ import { Observable } from 'rxjs/Observable';
 import { User } from '../models/user';
 import { GLOBAL } from './global';
 
-
-
 @Injectable({
 	providedIn: 'root'
 })

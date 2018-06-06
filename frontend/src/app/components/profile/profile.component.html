@@ -1,0 +1,77 @@
+<div class="row">
+	<div class="general-container col-lg-8 ">
+		<div class="section-header">
+			<h1>{{title}}</h1>
+		</div>
+
+		<div class="user-card col-lg-12" *ngIf="user">
+			<div class="row">
+				<div class="user-avatar col-lg-6">
+					<img src="{{ url + 'get-image-user/' + user.image }}" *ngIf="user.image" alt="Card image" />
+					<img src="assets/images/usuario.png" *ngIf="!user.image" alt="Card image" />
+					<!-- Estadísticas -->
+					<div class="row" *ngIf="stats">
+						<div class="col-lg-12">
+							<div class="stats col-lg-4">
+								<a href="#">
+									<span>Siguiendo</span> 
+									<span class="text-yellow">{{stats.following}}</span>
+								</a>
+							</div>
+							<div class="stats col-lg-4">
+								<a href="#">
+									<span>Seguidores</span> 
+									<span class="text-yellow">{{stats.followed}}</span>
+								</a>
+							</div>
+							<div class="stats col-lg-4">
+								<a href="#">
+									<span>Publicaciones</span> 
+									<span class="text-yellow">{{stats.publications}}</span>
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="user-data col-lg-6">
+					<h2>{{user.name + ' ' +user.surname}}</h2>
+					<h3><small class="user-nick">{{user.nick}}</small></h3>
+					<div class="row" *ngIf=" user._id != identity._id">
+						<div class="col-lg-6">
+							<span class="badge badge-secondary" *ngIf="!followed">
+								<span class="far fa-thumbs-down"></span>
+								no te sigue
+							</span>
+							<span class="badge badge-primary" *ngIf="followed">
+								<span class="far fa-thumbs-up"></span>
+								te sigue
+							</span>
+						</div>
+						<div class="col-lg-6 derecha follow-buttons">
+							<button class="btn btn-success btn-sm" *ngIf="!following" (click)="followUser(user._id)">
+								<span class="fas fa-plus-square"></span>
+								Seguir
+							</button>
+							<button class="btn btn-danger btn-sm" *ngIf="following" (click)="deleteFollowUser(user._id)">
+								<span class="fas fa-minus-square"></span>
+								Dejar de seguir
+							</button>
+						</div>
+					</div>
+					<br>
+					<div class="user-status">
+						<p class="lead"><em>{{user.status}}</em></p>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="timeline" class="col-lg-12 publications" *ngIf="user">
+			<app-publications [user_id]="user._id"></app-publications>
+		</div>
+	</div>
+
+	<div class="general-container col-lg-4">
+		<app-sidebar></app-sidebar>
+	</div>
+</div>

@@ -15,6 +15,7 @@ exports.createToken = function(user){
 		email: user.email,
 		role: user.role,
 		image: user.image,
+		status: user.status,
 		iat: moment().unix(), // fecha de creación del token
 		exp: moment().add(30, 'days').unix() // fecha de expiración
 	};
