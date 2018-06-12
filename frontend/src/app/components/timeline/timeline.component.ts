@@ -91,6 +91,22 @@ export class TimelineComponent implements OnInit {
 
 	}
 
+	deletePublication(publication_id){
+		this._publicationService.deletePublication(this.token, publication_id).subscribe(
+			response => {
+				this.refreshPublications();
+			},
+			error => {
+				var errorMessage = <any>error;
+				console.log(errorMessage);
+
+				if(errorMessage != null){
+					this.status = 'error';
+				}
+			}
+			);
+	}
+
 	viewMore(){
 		this.page += 1;
 
@@ -102,7 +118,7 @@ export class TimelineComponent implements OnInit {
 	}
 
 	/** Método que captura el evento enviado por sidebar **/
-	refreshPublications(event){
+	refreshPublications(event=null){
 		this.noMore = false;
 		this.getPublications(1);
 	}

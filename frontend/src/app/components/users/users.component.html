@@ -3,6 +3,8 @@
 		<div class="section-header">
 			<h1>{{title}}</h1>
 		</div>
+
+		<!-- LISTADO -->
 		<div *ngIf="users; then hay; else nohay"></div>
 		<ng-template #hay>
 			<div *ngFor="let user of users">
@@ -22,7 +24,7 @@
 							<p class="lead text-white"><em>{{user.status}}</em></p>
 						</div>
 
-							<!-- SECCIÓN FOLLOWS -->
+						<!-- SECCIÓN FOLLOWS -->
 						<div class="card-body col-lg-2">
 							<div class="follow-buttons">
 								<button class="btn btn-success btn-sm" *ngIf=" follows.indexOf(user._id) < 0"
@@ -37,7 +39,7 @@
 								</button>
 							</div>
 						</div>
-							<!-- FIN SECCIÓN FOLLOWS -->
+						<!-- FIN SECCIÓN FOLLOWS -->
 					</div>
 				</div>
 			</div>
@@ -57,15 +59,18 @@
 			</ul>
 		</div>
 		<!-- FIN PAGINACIÓN -->
-	</ng-template>
-	<ng-template #nohay>
-		<div class="progress">
-			<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="75" style="width: 75%"></div>
-		</div>
-	</ng-template>
-</div>
+		</ng-template>
+		<ng-template #nohay>
+			<div class="card bg-primary border-danger col-lg-12">
+				<div class="card-header"><h4 class="user-name text-yellow">No hay más gente!!!</h4></div>
+				<div class="card-body text-white">
+					<h5>No hay más usuarios en la plataforma</h5>
+				</div>
+			</div>
+		</ng-template>
+	</div>
 
-<div class="general-container col-lg-4">
-	<app-sidebar></app-sidebar>
-</div>
+	<div class="general-container col-lg-4">
+		<app-sidebar></app-sidebar>
+	</div>
 </div>

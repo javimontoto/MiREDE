@@ -8,13 +8,45 @@
 	<div *ngFor="let publication of publications">
 		<div class="publication-card col-lg-12" [ngClass]='{"publication-my" : publication.user._id == identity._id}' >
 			<div class="card-header">
-				<div class="publication-avatar">
-					<img src="{{ url + 'get-image-user/' + publication.user.image }}" *ngIf="publication.user.image" alt="Card image" />
-					<img src="assets/images/usuario.png" *ngIf="!publication.user.image" alt="Card image" />
-				</div>
-				<div class="publication-user">
-					<h3>{{publication.user.name + ' ' +publication.user.surname}}</h3>
-					<small>{{ (publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo }}</small>
+				<div class="row">
+					<div class="col-lg-11">
+						<div class="publication-avatar">
+							<img src="{{ url + 'get-image-user/' + publication.user.image }}" *ngIf="publication.user.image" alt="Card image" />
+							<img src="assets/images/usuario.png" *ngIf="!publication.user.image" alt="Card image" />
+						</div>
+						<div class="publication-user">
+							<h3>{{publication.user.name + ' ' +publication.user.surname}}</h3>
+							<small>{{ (publication.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo }}</small>
+						</div>
+					</div>
+					<div class="col-lg-1 derecha" *ngIf=" publication.user._id == identity._id">
+						<a class="btn btn-danger button-trash" data-toggle="modal" href="#deletePub{{publication._id}}" role="button">
+							<span class="fas fa-trash-alt span-trash"></span>							
+						</a>
+
+						<!-- Modal HTML -->
+						<div id="deletePub{{publication._id}}" class="modal fade">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">¿Seguro que quieres eliminar la publicación?</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<p class="crop text-muted"><em>"{{publication.text}}"</em></p>
+										<p>Si la borras no podrás recuperarla.</p>
+									</div>
+									<div class="modal-footer">
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+										<button type="button" class="btn btn-danger" data-dismiss="modal" (click)="deletePublication(publication._id)">Borrar la publicación</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
 				</div>
 			</div>
 			<div class="col-lg-12" *ngIf="publication.file && showImage != publication._id">

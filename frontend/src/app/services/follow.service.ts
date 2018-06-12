@@ -28,4 +28,28 @@ export class FollowService {
 
 		return this._http.delete(this.url+'follow/'+id, {headers:headers});
 	}
+
+	/** Método para LISTAR a los siguiendo **/
+	getFollowing(token, user_id = null, page = 1):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+
+		var url = this.url+'following/';
+		if(user_id != null) {
+			url = this.url+'following/'+user_id+'/'+page;
+		}
+
+		return this._http.get(url, {headers:headers});
+	}
+
+	/** Método para LISTAR a los seguidores **/
+	getFollowed(token, user_id = null, page = 1):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+
+		var url = this.url+'followed/';
+		if(user_id != null) {
+			url = this.url+'followed/'+user_id+'/'+page;
+		}
+
+		return this._http.get(url, {headers:headers});	
+	}
 }

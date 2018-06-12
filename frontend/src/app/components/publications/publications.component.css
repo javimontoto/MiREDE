@@ -7,6 +7,10 @@
 	background-color: #ffff008c !important;
 }
 
+.card-header{
+	margin-top: 2px;
+}
+
 .card-img{
 	width: 100%;
 	margin-bottom: 0.8rem;
@@ -54,4 +58,21 @@
 	border: 2px;
 	border-color: #593196;
 	border-style: solid;
+}
+
+.button-trash{
+	border-radius: 6.25rem;
+	height: 2.4375rem;
+	margin-top: 0.3125rem;
+}
+
+.span-trash{
+	margin-top: 5px;
+}
+
+.crop {
+	overflow:hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	width:250px; 
 }

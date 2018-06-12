@@ -63,17 +63,27 @@ function getFollowingUsers(req, res){
 		}
 	}
 
-	var items_per_page = 3;
+	var items_per_page = 5;
 
 	// con populate() lo que hacemos es recuperar el usuario seguido completo
-	Follow.find({user:user_id}).populate('followed', 'name surname _id').paginate(page, items_per_page, (err, follows, total) => {
+	Follow.find({user:user_id}).populate('followed', '_id name surname nick image status').paginate(page, items_per_page, (err, follows, total) => {
 		if(err) return res.status(500).send({message: 'ERROR en el servidor!!!'});
-		if(total == 0) return res.status(404).send({message: 'NO sigues a ningún usuario!!!'});
 
-		return res.status(200).send({
-			total : total,
-			pages : Math.ceil(total/items_per_page),
-			follows : follows
+		User.findById(user_id, '-password', (err, user) => {
+			if(err) return res.status(500).send({message: 'Error en la petición!!'});
+			if(!user) return res.status(404).send({message: 'El usuario no existe!!'});
+			if(total == 0) return res.status(200).send({user : user});
+
+			followUserIds(user_id).then((value) => {
+				return res.status(200).send({
+					total : total,
+					user: user,
+					pages : Math.ceil(total/items_per_page),
+					follows : follows,
+					users_following : value.following,
+					users_follow_me : value.followed
+				});
+			});
 		});
 	});
 }
@@ -97,15 +107,24 @@ function getFollowedUsers(req, res){
 
 	var items_per_page = 3;
 
-	// con populate() lo que hacemos es recuperar el usuario seguido completo
-	Follow.find({followed:user_id}).populate('user', 'name surname _id').paginate(page, items_per_page, (err, follows, total) => {
+	Follow.find({followed:user_id}).populate('user', '_id name surname nick image status').paginate(page, items_per_page, (err, follows, total) => {
 		if(err) return res.status(500).send({message: 'ERROR en el servidor!!!'});
-		if(total == 0) return res.status(404).send({message: 'NO te sigue ningún usuario!!!'});
 
-		return res.status(200).send({
-			total : total,
-			pages : Math.ceil(total/items_per_page),
-			follows : follows
+		User.findById(user_id, '-password', (err, user) => {
+			if(err) return res.status(500).send({message: 'Error en la petición!!'});
+			if(!user) return res.status(404).send({message: 'El usuario no existe!!'});
+			if(total == 0) return res.status(200).send({user : user});
+
+			followUserIds(user_id).then((value) => {
+				return res.status(200).send({
+					total : total,
+					user: user,
+					pages : Math.ceil(total/items_per_page),
+					follows : follows,
+					users_following : value.following,
+					users_followed : value.followed
+				});
+			});
 		});
 	});
 }
@@ -132,6 +151,51 @@ function getFollowBacks(req, res){
 
 		return res.status(200).send({follows});
 	});
+}
+
+
+//** FUNCIONES AUXILIARES **//
+
+/*** Método auxiliar ASÍNCRONO para sacar los ids de los usuarios seguidos y que me siguen ***/
+async function followUserIds(user_id){
+	try{
+		// con select 'valor':0 lo que hago es deseleccionar ese campo
+		var followings = await Follow.find({'user':user_id}).select({'_id':0, '_v':0, 'user':0}).exec()
+		.then((followings) => {
+			var follows_clean = [];
+
+			followings.forEach((follow) => {
+				follows_clean.push(follow.followed);
+			});
+
+			return follows_clean;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
+
+		var followeds = await Follow.find({'followed':user_id}).select({'_id':0, '_v':0, 'followed':0}).exec()
+		.then((followeds) => {
+			var follows_clean = [];
+
+			followeds.forEach((follow) => {
+				follows_clean.push(follow.user);
+			});
+
+			return follows_clean;
+		})
+		.catch((err) => {
+			return handleError(err);
+		});
+
+		return {
+			following: followings,
+			followed: followeds
+		}
+
+	} catch(e){
+		console.log(e);
+	}
 }
 
 module.exports = {

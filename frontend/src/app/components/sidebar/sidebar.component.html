@@ -21,13 +21,13 @@
 	<div class="row" *ngIf="stats">
 		<div class="col-lg-12">
 			<div class="stats col-lg-4">
-				<a href="#">
+				<a [routerLink]="['/siguiendo', identity._id, 1]">
 					<span>Siguiendo</span> 
 					<span class="text-yellow">{{stats.following}}</span>
 				</a>
 			</div>
 			<div class="stats col-lg-4">
-				<a href="#">
+				<a [routerLink]="['/seguidores', identity._id, 1]">
 					<span>Seguidores</span> 
 					<span class="text-yellow">{{stats.followed}}</span>
 				</a>
@@ -55,17 +55,17 @@
 	<div class="card-body">
 
 		<!-- Resultado del envío del FORMULARIO -->
-		<div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
+		<!-- <div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			Publicación exitosa!!!
-		</div>
+		</div> -->
 		<div class="alert alert-dismissible alert-danger" *ngIf="status == 'error'">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			FALLO en la publicación!!!
 		</div>
 		<!-- FIN Resultado del envío del FORMULARIO -->
 
-		<form #newPubForm="ngForm" (ngSubmit)='onSubmit(newPubForm); sendPublication($event);'>
+		<form #newPubForm="ngForm" (ngSubmit)=' onSubmit(newPubForm, $event); '>
 			<p>
 				<label>¿Qué estás pensando?</label>
 				<textarea name="text" #text="ngModel" [(ngModel)]="publication.text" class="form-control" required></textarea>

@@ -13,6 +13,6 @@ declare var $:any;
 export class AppComponent {
 
 	onActivate(event) {
-		window.scroll(0,0);
+		window.scroll(0,0); // hace que cuando entremos en una vista se situe arriba
 	}
 }

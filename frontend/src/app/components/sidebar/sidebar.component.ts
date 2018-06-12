@@ -22,6 +22,9 @@ export class SidebarComponent implements OnInit {
 	public status;
 	public publication: Publication;
 
+	// Output --> ponemos la etiqueta "@Output" y la propiedad que es el evento
+	@Output() publicationSended = new EventEmitter();
+
 	constructor(
 		private _route             : ActivatedRoute,
 		private _router            : Router,
@@ -39,7 +42,7 @@ export class SidebarComponent implements OnInit {
 
 	ngOnInit() { }
 
-	onSubmit(form){
+	onSubmit(form, event){
 		this._publicationService.newPublication(this.token, this.publication).subscribe(
 			response => {
 				if(response.publicationStored){
@@ -47,15 +50,16 @@ export class SidebarComponent implements OnInit {
 					this.status = 'success';
 					this.stats.publications += 1;
 
-					if(this.filesToUpload != null){
+					if(this.filesToUpload && this.filesToUpload.length){
 						this._uploadService.makeFileRequest(this.url+'upload-image-pub/'+this.publication._id, [], this.filesToUpload, this.token, 'image').then((result: any) => {
-							//console.log(result);
 							this.publication.file = result.publication.file;
+							form.reset();
 						});
 					}
 
 					form.reset();
-					this._router.navigate(['/timeline']);
+					this.publicationSended.emit({send:'true'});
+					this._router.navigate(['/timeline']);					
 				}else{
 					this.status = 'error';
 				}
@@ -78,10 +82,5 @@ export class SidebarComponent implements OnInit {
 	}
 
 
-	// Output --> ponemos la etiqueta "@Output" y la propiedad que es el evento
-	@Output() publicationSended = new EventEmitter();
-	sendPublication(event){
-		this.publicationSended.emit({send:'true'});
-	}
 }
 

@@ -34,4 +34,8 @@
 	justify-content: flex-end;
 }
 
+.border-danger {
+	border: 2px solid #FC3939 !important;
+}
+
 /** fin GENERALES **/

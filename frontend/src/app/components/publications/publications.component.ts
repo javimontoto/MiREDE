@@ -90,7 +90,22 @@ export class PublicationsComponent implements OnInit {
 				}
 			}
 			);
+	}
 
+	deletePublication(publication_id){
+		this._publicationService.deletePublication(this.token, publication_id).subscribe(
+			response => {
+				this.refreshPublications();
+			},
+			error => {
+				var errorMessage = <any>error;
+				console.log(errorMessage);
+
+				if(errorMessage != null){
+					this.status = 'error';
+				}
+			}
+			);
 	}
 
 	viewMore(){
@@ -111,4 +126,8 @@ export class PublicationsComponent implements OnInit {
 		this.showImage = 0;
 	}
 
+	refreshPublications(event=null){
+		this.noMore = false;
+		this.getPublications(this.identity._id,1);
+	}
 }

@@ -19,8 +19,17 @@
 	background-color: #ffff008c !important;
 }
 
-.card-img{
+.card-img-normal{
 	width: 100%;
+	margin-bottom: 0.8rem;
+	margin-top: 0.8rem;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.card-img-small{
+	width: 100%;
+	max-height: 15rem;
 	margin-bottom: 0.8rem;
 	margin-top: 0.8rem;
 	border-radius: 10px;
@@ -64,4 +73,21 @@
 
 .publication-my{
 	border: 2px solid #593196;
+}
+
+.button-trash{
+	border-radius: 6.25rem;
+	height: 2.4375rem;
+	margin-top: 0.3125rem;
+}
+
+.span-trash{
+	margin-top: 5px;
+}
+
+.crop {
+	overflow:hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	width:250px; 
 }

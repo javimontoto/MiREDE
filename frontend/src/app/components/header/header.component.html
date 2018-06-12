@@ -26,16 +26,12 @@
 					</a>
 				</li>
 
-				<li class="avatar">
-
-					<img src="{{ url + 'get-image-user/' + identity.image }}" *ngIf="identity && identity.image" alt="Card image" />
-					<img src="assets/images/usuario.png" *ngIf="!identity.image" alt="Card image" />
-				</li>
-
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">
+					<a class="nav-link dropdown-toggle avatar-name" data-toggle="dropdown" href="#" role="button" aria-haspopup="false" aria-expanded="false">	
+						<img class="avatar" src="{{ url + 'get-image-user/' + identity.image }}" *ngIf="identity && identity.image" alt="Card image" />
+						<img class="avatar" src="assets/images/usuario.png" *ngIf="!identity.image" alt="Card image" />	
 						{{identity.name}}
-						<span class="caret"></span>
+						<span class="caret"></span>						
 					</a>
 
 					<div class="dropdown-menu">
