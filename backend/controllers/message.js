@@ -43,9 +43,9 @@ function getReceivedMessages(req, res){
 		page = req.params.page;
 	}
 
-	var items_per_page = 4;
+	var items_per_page = 5;
 
-	Message.find({receiver: user_id}).populate('emitter', '_id name surname nick image').paginate(page, items_per_page, (err, messages, total) => {
+	Message.find({receiver: user_id}).sort('-created_at').populate('receiver emitter', '_id name surname nick image').paginate(page, items_per_page, (err, messages, total) => {
 		if(err) return res.status(500).send({message: 'ERROR en la petición!!!'});
 		if(total == 0) return res.status(404).send({message: 'No hay mensajes recibidos'});
 
@@ -66,9 +66,9 @@ function getEmittedMessages(req, res){
 		page = req.params.page;
 	}
 
-	var items_per_page = 4;
+	var items_per_page = 5;
 
-	Message.find({emitter: user_id}).populate('emitter receiver', '_id name surname nick image').paginate(page, items_per_page, (err, messages, total) => {
+	Message.find({emitter: user_id}).sort('-created_at').populate('receiver', '_id name surname nick image').paginate(page, items_per_page, (err, messages, total) => {
 		if(err) return res.status(500).send({message: 'ERROR en la petición!!!'});
 		if(total == 0) return res.status(404).send({message: 'No hay mensajes recibidos'});
 
@@ -89,9 +89,9 @@ function getUnviewedMessages(req, res){
 		page = req.params.page;
 	}
 
-	var items_per_page = 4;
+	var items_per_page = 5;
 
-	Message.find({receiver: user_id, viewed: false}).populate('emitter receiver', '_id name surname nick image').paginate(page, items_per_page, (err, messages, total) => {
+	Message.find({receiver: user_id, viewed: false}).sort('-created_at').populate('emitter receiver', '_id name surname nick image').paginate(page, items_per_page, (err, messages, total) => {
 		if(err) return res.status(500).send({message: 'ERROR en la petición!!!'});
 		if(total == 0) return res.status(404).send({message: 'No hay mensajes no leidos'});
 

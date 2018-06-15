@@ -8,21 +8,27 @@
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="nav navbar-nav ml-auto" *ngIf='identity'>
 				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['home']">
+					<a class="nav-link" [routerLink]="['/home']">
 						<span class="fas fa-home"></span>
 						Inicio
 					</a>
 				</li>
 				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['gente']">
+					<a class="nav-link" [routerLink]="['/gente']">
 						<span class="fas fa-users"></span>
 						Gente
 					</a>
 				</li>
 				<li class="nav-item" [routerLinkActive]="['active']">
-					<a class="nav-link" [routerLink]="['timeline']">
+					<a class="nav-link" [routerLink]="['/timeline']">
 						<span class="fas fa-list-ul"></span>
 						Timeline
+					</a>
+				</li>
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['/mensajes']">
+						<span class="fas fa-envelope"></span>
+						Mensajes
 					</a>
 				</li>
 

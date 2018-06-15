@@ -1,0 +1,70 @@
+.nav-item:hover{
+	background: #0000000f !important;
+}
+
+.messages-header{
+	overflow: hidden;
+}
+
+.messages-header-text{
+	float: left;
+}
+
+.messages-header-button{
+	padding-top: 7px;
+}
+
+.message-card {
+	margin-bottom: 20px;
+	background-color: #ffff0091 !important;
+}
+
+.message-card .card-header{
+	margin-top: 2px;
+	background-color: #ffff008c !important;
+}
+
+.message-avatar {
+	width: 50px;
+	height: 50px;
+	border-radius: 100px;
+	overflow: hidden;
+	float: left;
+	margin-right: 20px;
+}
+
+.message-avatar img{
+	width: 50px;
+	height: 50px;
+}
+
+.message-user{
+	color: #593196;
+	display: block;
+}
+
+.message-user h3{
+	margin-bottom: 0px;
+}
+
+.message-text{
+	color: black;
+}
+
+
+.button-trash{
+	border-radius: 6.25rem;
+	height: 2.4375rem;
+	margin-top: 0.3125rem;
+}
+
+.span-trash{
+	margin-top: 5px;
+}
+
+.crop {
+	overflow:hidden; 
+	white-space:nowrap; 
+	text-overflow:ellipsis; 
+	width:250px; 
+}

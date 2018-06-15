@@ -1,0 +1,41 @@
+<div class="col-lg-10">
+	<div class="section-header">
+		<h1>{{title}}</h1>
+	</div>
+
+	<!-- Sección de Alertas -->
+	<div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		Mensaje enviado correctamente, míralo en <a [routerLink]="['/mensajes/enviados']">mensajes enviados</a>
+	</div>
+	<div class="alert alert-dismissible alert-danger" *ngIf="status == 'error'">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		Error al enviar el mensaje!!
+	</div>
+	<!-- FIN Sección de Alertas -->
+
+	<!-- formulario envío mensajes -->
+	<form #formAdd="ngForm" (ngSubmit)=' onSubmit(formAdd);'>
+		<p>
+			<label>Para:</label>
+			<select name="receiver" #text="ngModel" [(ngModel)]="message.receiver" class="form-control" required *ngIf=" follows">
+				<option *ngFor="let follow of follows" value="{{follow.followed._id}}">
+					{{follow.followed.name + ' ' +  follow.followed.surname + ' (' + follow.followed.nick + ')'}}
+			</select>
+			
+		</p>
+
+		<p>
+			<label>Mensaje:</label>
+			<textarea name="text" #text="ngModel" [(ngModel)]="message.text" class="form-control" required></textarea>
+			<span *ngIf="!text.valid && text.touched" class="text-danger">
+				El mensaje es obligatorio!!
+			</span>
+		</p>
+
+		<div class="derecha">
+			<input type="submit" value="Enviar" class="btn btn-success" [disabled]="!formAdd.form.valid" />
+		</div>
+	</form>
+	<!-- FIN formulario envío mensajes -->
+</div>

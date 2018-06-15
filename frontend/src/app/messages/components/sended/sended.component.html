@@ -1,0 +1,65 @@
+<div class="section-header messages-header">
+	<div class="messages-header-text">
+		<h1>{{title}}</h1>
+	</div>
+	<div class="derecha messages-header-button">
+		<button class="btn btn-success" (click)="refreshMessages($event)">
+			<span class="fas fa-sync-alt"></span>
+			Actualizar
+		</button>
+	</div>
+</div>
+<div *ngIf="messages; then hay; else nohay"></div>
+
+<ng-template #hay>
+	<div *ngFor="let message of messages">
+		<div class="message-card col-lg-12">
+			<div class="card-header">
+				<div class="col-lg-12">
+					<div class="message-avatar">
+						<img src="{{ url + 'get-image-user/' + message.receiver.image }}" *ngIf="message.receiver.image" alt="Card image" />
+						<img src="assets/images/usuario.png" *ngIf="!message.receiver.image" alt="Card image" />
+					</div>
+					<div class="message-user">
+						<a [routerLink]="['/perfil', message.receiver._id]">
+							<h3>{{message.receiver.name + ' ' +message.receiver.surname}}</h3>
+						</a>
+						<small>{{ (message.created_at | amFromUnix) | amLocale: 'es' | amTimeAgo }}</small>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-lg-12" >
+				<div class="card-body" >
+					<h5 class="message-text">{{message.text}}</h5>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<!-- PAGINACIÓN -->
+	<div class="col-lg-12" *ngIf="pages>1">
+		<ul class="pagination center">
+			<li class="page-item" [ngClass]="{disabled : page <= 1 }">
+				<a class="page-link" [routerLink]="['/mensajes/enviados/', prev_page]">&laquo; Anterior</a>
+			</li>
+			<li *ngFor="let pagina of paginas" class="page-item" [routerLinkActive]="['active']">
+				<a class="page-link" [routerLink]="['/mensajes/enviados/', pagina+1]">{{pagina+1}}</a>
+			</li>			
+			<li class="page-item" [ngClass]="{disabled : pages == page }">
+				<a class="page-link" [routerLink]="['/mensajes/enviados/', next_page]">Siguiente &raquo;</a>
+			</li>
+		</ul>
+	</div>
+	<!-- FIN PAGINACIÓN -->
+</ng-template>
+
+<ng-template #nohay>
+	<div class="message-card border-danger col-lg-12">
+		<div class="card-header"><h4 class="message-user">No hay mensajes enviados!!!</h4></div>
+		<div class="card-body">
+			<h5>Parece que todavía no has enviado ningún mensaje.</h5>
+			<p class="card-text">Puedes enviar mensajes en <a [routerLink]="['/mensajes/enviar']">Enviar mensaje</a></p>
+		</div>
+	</div>
+</ng-template>

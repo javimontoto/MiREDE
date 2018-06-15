@@ -1,0 +1,28 @@
+<div class="general-container">
+	<div class="row">
+		<div class="col-lg-4">
+			<div class="section-header">
+				<h1>{{title}}</h1>
+			</div>
+			<ul class="nav nav-pills flex-column">
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['enviar']">Enviar mensaje</a>				
+				</li>
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['recibidos/1']">Mensajes recibidos</a>				
+				</li>
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['enviados/1']">Mensajes enviados</a>				
+				</li>
+				<li class="nav-item" [routerLinkActive]="['active']">
+					<a class="nav-link" [routerLink]="['/home']">Información</a>				
+				</li>
+			</ul>
+		</div>
+
+		<div class="col-lg-8">
+			<!-- componentes/router outlet -->
+			<router-outlet></router-outlet>
+		</div>
+	</div>
+</div>

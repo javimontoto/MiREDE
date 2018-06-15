@@ -1,7 +1,7 @@
 import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-// Importar componentes
+// Componentes
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/register/register.component';
 import { HomeComponent } from './components/home/home.component';
@@ -12,6 +12,8 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { FollowingComponent } from './components/following/following.component';
 import { FollowedComponent } from './components/followed/followed.component';
 
+// Guard
+import { UserGuard } from './services/user.guard';
 
 
 const routes: Routes = [
@@ -19,13 +21,13 @@ const routes: Routes = [
 	{path: 'home', component: HomeComponent},
 	{path: 'login', component: LoginComponent},
 	{path: 'register', component: RegisterComponent},
-	{path: 'mis-datos', component: UserEditComponent},
-	{path: 'gente', component: UsersComponent},
-	{path: 'gente/:page', component: UsersComponent},
-	{path: 'timeline', component: TimelineComponent},
-	{path: 'perfil/:id', component: ProfileComponent},
-	{path: 'siguiendo/:id/:page', component: FollowingComponent},
-	{path: 'seguidores/:id/:page', component: FollowedComponent},
+	{path: 'mis-datos', component: UserEditComponent, canActivate:[UserGuard]},
+	{path: 'gente', component: UsersComponent, canActivate:[UserGuard]},
+	{path: 'gente/:page', component: UsersComponent, canActivate:[UserGuard]},
+	{path: 'timeline', component: TimelineComponent, canActivate:[UserGuard]},
+	{path: 'perfil/:id', component: ProfileComponent, canActivate:[UserGuard]},
+	{path: 'siguiendo/:id/:page', component: FollowingComponent, canActivate:[UserGuard]},
+	{path: 'seguidores/:id/:page', component: FollowedComponent, canActivate:[UserGuard]},
 	{path: '**', redirectTo:'home'}		//--> cuando hay un error
 ];
 

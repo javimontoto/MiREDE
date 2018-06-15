@@ -2,10 +2,11 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { User } from '../../models/user';
 import { Follow } from '../../models/follow';
+import { GLOBAL } from '../../services/global';
+
 
 import { UserService } from '../../services/user.service';
 import { FollowService } from '../../services/follow.service';
-import { GLOBAL } from '../../services/global';
 
 
 @Component({
@@ -15,9 +16,9 @@ import { GLOBAL } from '../../services/global';
 })
 export class UsersComponent implements OnInit {
 	public title : string;
-	public url   : string;
 	public total : string;
 	public status: string;
+	public url   : string;
 	public users : User[];	// Array con los usuarios
 	public identity;
 	public token;
@@ -35,9 +36,9 @@ export class UsersComponent implements OnInit {
 		private _followService: FollowService
 		) { 
 		this.title    = "Gente";
-		this.url      = GLOBAL.url;
 		this.identity = this._userService.getIdentity();
 		this.token    = this._userService.getToken();
+		this.url      = GLOBAL.url;
 	}
 
 	ngOnInit() {

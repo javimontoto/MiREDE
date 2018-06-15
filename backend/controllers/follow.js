@@ -133,7 +133,7 @@ function getFollowedUsers(req, res){
 function getMyFollows(req, res){
 	var user_id = req.user.sub;
 
-	Follow.find({user: user_id}).populate('user followed', 'name surname _id').exec((err, follows) => {
+	Follow.find({user: user_id}).populate('user followed', '_id name surname nick').exec((err, follows) => {
 		if(err) return res.status(500).send({message: 'ERROR en el servidor!!!'});
 		if(follows.length == 0) return res.status(404).send({message: 'NO sigues a ningún usuario!!!'});
 
@@ -145,7 +145,7 @@ function getMyFollows(req, res){
 function getFollowBacks(req, res){
 	var user_id = req.user.sub;
 
-	Follow.find({followed: user_id}).populate('user followed', 'name surname _id').exec((err, follows) => {
+	Follow.find({followed: user_id}).populate('user followed', '_id name surname nick').exec((err, follows) => {
 		if(err) return res.status(500).send({message: 'ERROR en el servidor!!!'});
 		if(follows.length == 0) return res.status(404).send({message: 'NO te sigue ningún usuario!!!'});
 

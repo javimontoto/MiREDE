@@ -80,8 +80,8 @@ export class FollowingComponent implements OnInit {
 					this.status = 'success';
 					this.total = response.total;
 					this.following = response.follows;
-					this.pages = response.pages;
 					this.follows = response.users_following;
+					this.pages = response.pages;
 					this.paginas = Array.from(Array(this.pages).keys());
 					if(page > this.pages){ //--> si se pone una página incorrecta nos lleva a la primera
 						this._router.navigate(['/siguiendo', this.user_id, 1]);

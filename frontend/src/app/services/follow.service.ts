@@ -52,4 +52,18 @@ export class FollowService {
 
 		return this._http.get(url, {headers:headers});	
 	}
+
+	/** Método para LISTAR los usuarios a los que seguimos **/
+	getMyFollows(token):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+
+		return this._http.get(this.url+'get-my-follows', {headers:headers});
+	}
+
+	/** Método para LISTAR los usuarios que nos están siguiendo **/
+	getFollowBacks(token):Observable<any>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', token);
+
+		return this._http.get(this.url+'get-follow-backs', {headers:headers});
+	}
 }

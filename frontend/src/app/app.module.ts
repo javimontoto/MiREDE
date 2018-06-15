@@ -2,13 +2,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { MomentModule } from 'angular2-moment';
-
-
 import { FormsModule} from '@angular/forms';
 
-//Rutas
+// Servicios --> para poder usar el Guard en cualquier ruta
+import { UserGuard } from './services/user.guard';
+
+// Módulo mensajes creado por mi
+import { MessagesModule } from './messages/messages.module';
+
+// Rutas
 import { routing } from './app.routes';
 
+// Componentes
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoginComponent } from './components/login/login.component';
@@ -22,6 +27,7 @@ import { PublicationsComponent } from './components/publications/publications.co
 import { ProfileComponent } from './components/profile/profile.component';
 import { FollowingComponent } from './components/following/following.component';
 import { FollowedComponent } from './components/followed/followed.component';
+
 
 @NgModule({
   declarations: [
@@ -44,9 +50,12 @@ import { FollowedComponent } from './components/followed/followed.component';
     FormsModule,
     HttpClientModule,
     MomentModule,
-    routing
+    routing,
+    MessagesModule
   ],
-  providers: [],
+  providers: [
+    UserGuard
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
