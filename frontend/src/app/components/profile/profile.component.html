@@ -13,19 +13,23 @@
 					<div class="row" *ngIf="stats">
 						<div class="col-lg-12">
 							<div class="stats col-lg-4">
-								<a [routerLink]="['/siguiendo', user._id, 1]">
+								<!-- <a [routerLink]="['/siguiendo', user._id, 1]">
+									<span>Siguiendo</span> 
+									<span class="text-yellow">{{stats.following}}</span>
+								</a> -->
+								<a (click)="loadSecction('followings')" style="cursor: pointer">
 									<span>Siguiendo</span> 
 									<span class="text-yellow">{{stats.following}}</span>
 								</a>
 							</div>
 							<div class="stats col-lg-4">
-								<a [routerLink]="['/seguidores', user._id, 1]">
+								<a (click)="loadSecction('followeds')" style="cursor: pointer">
 									<span>Seguidores</span> 
 									<span class="text-yellow">{{stats.followed}}</span>
 								</a>
 							</div>
 							<div class="stats col-lg-4">
-								<a href="#">
+								<a (click)="loadSecction('publications')" style="cursor: pointer">
 									<span>Publicaciones</span> 
 									<span class="text-yellow">{{stats.publications}}</span>
 								</a>
@@ -65,13 +69,24 @@
 				</div>
 			</div>
 		</div>
-		
-		<div id="timeline" class="col-lg-12 publications" *ngIf="user">
-			<app-publications [user_id]="user._id"></app-publications>
+
+		<div id="secction-user" class="publications" *ngIf="user">
+			<div *ngIf="section == 'publications'">
+				<app-publications [user_id]="user._id"></app-publications>
+			</div>
+			<div *ngIf="section == 'followings'">
+				<app-following [user_id]="user._id"></app-following>
+			</div>
+			<div *ngIf="section == 'followeds'">
+				<app-followed [user_id]="user._id"></app-followed>
+			</div>
 		</div>
+
 	</div>
 
 	<div class="general-container col-lg-4">
-		<app-sidebar></app-sidebar>
+		<app-sidebar
+			
+		></app-sidebar>
 	</div>
 </div>

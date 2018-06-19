@@ -18,24 +18,24 @@
 	</div>
 
 	<!-- Estadísticas -->
-	<div class="row" *ngIf="stats">
+	<div class="row" *ngIf="my_stats">
 		<div class="col-lg-12">
 			<div class="stats col-lg-4">
-				<a [routerLink]="['/siguiendo', identity._id, 1]">
+				<a [routerLink]="['/perfil', identity._id, 'followings']">
 					<span>Siguiendo</span> 
-					<span class="text-yellow">{{stats.following}}</span>
+					<span class="text-yellow">{{my_stats.following}}</span>
 				</a>
 			</div>
 			<div class="stats col-lg-4">
-				<a [routerLink]="['/seguidores', identity._id, 1]">
+				<a [routerLink]="['/perfil', identity._id, 'followeds']">
 					<span>Seguidores</span> 
-					<span class="text-yellow">{{stats.followed}}</span>
+					<span class="text-yellow">{{my_stats.followed}}</span>
 				</a>
 			</div>
 			<div class="stats col-lg-4">
-				<a href="#">
+				<a [routerLink]="['/perfil', identity._id, 'publications']">
 					<span>Publicaciones</span> 
-					<span class="text-yellow">{{stats.publications}}</span>
+					<span class="text-yellow">{{my_stats.publications}}</span>
 				</a>
 			</div>
 		</div>
@@ -55,10 +55,6 @@
 	<div class="card-body">
 
 		<!-- Resultado del envío del FORMULARIO -->
-		<!-- <div class="alert alert-dismissible alert-success" *ngIf="status == 'success'">
-			<button type="button" class="close" data-dismiss="alert">&times;</button>
-			Publicación exitosa!!!
-		</div> -->
 		<div class="alert alert-dismissible alert-danger" *ngIf="status == 'error'">
 			<button type="button" class="close" data-dismiss="alert">&times;</button>
 			FALLO en la publicación!!!

@@ -38,4 +38,28 @@
 	border: 2px solid #FC3939 !important;
 }
 
+.img-loading{
+	width: 35%;
+	display:block;
+	margin:auto;
+}
+
 /** fin GENERALES **/
+
+
+
+
+/** 
+*** HOME, LOGIN y REGISTER
+**/
+.jumbotron {
+	background-color: #ffff0091 !important;
+	text-align: center;
+}
+
+.display-4 { 
+	font-weight: bold !important;
+	color: #593196;
+}
+
+/** fin HOME, LOGIN y REGISTER **/

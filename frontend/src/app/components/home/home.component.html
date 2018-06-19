@@ -3,11 +3,98 @@
 		<h1 class="display-4">{{title}}</h1>
 		<p class="lead">Disfruta de las publicaciones de tus amig@s y comparte tu día!!!</p>
 		<hr class="my-4">
-		<p>It uses utility classes for typography and spacing to space content out within the larger container.</p>
-		<p class="lead">
-			<a class="btn btn-warning btn-lg" href="#" role="button">Timeline</a>
-			<a class="btn btn-info btn-lg" href="#" role="button">Mi perfil</a>
-			<a class="btn btn-primary btn-lg" [routerLink]="['gente']" role="button">Gente</a>
-		</p>
+		<p *ngIf="identity"><strong>Aquí tienes una breve introducción a algunas secciones</strong></p>
+
+		<!-- Si estamos logueados -->
+		<div class="row" *ngIf="identity">
+			<div class="col-lg-3">
+				<a [routerLink]="['/perfil', identity._id]">
+					<div class="card text-white bg-primary mb-3">						
+						<div class="card-header">
+							<h4>
+								<span class="fas fa-list-ul"></span> Mi perfil
+							</h4>
+						</div>
+						<div class="card-body">
+							<p class="card-text">Consulta tus estadísticas (número de publicaciones, usuarios a los que sigues y que te siguen)</p>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3">
+				<a [routerLink]="['/timeline']">
+					<div class="card text-white bg-warning mb-3">
+						<div class="card-header">
+							<h4>
+								<span class="fas fa-list-ul"></span> Timeline
+							</h4>
+						</div>
+						<div class="card-body">
+							<p class="card-text">El tablón donde puedes ver tus publicaciones y las de los amig@s a los que sigues</p>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3">
+				<a [routerLink]="['/gente']">
+					<div class="card text-white bg-success mb-3">
+						<div class="card-header">
+							<h4>
+								<span class="fas fa-users"></span> Gente
+							</h4>
+						</div>
+						<div class="card-body">
+							<p class="card-text">Conoce a todos los usuario de MiREDE</p>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3">
+				<a [routerLink]="['/mensajes']">
+					<div class="card text-white bg-info mb-3">
+						<div class="card-header">
+							<h4>
+								<span class="fas fa-envelope"></span> Mensajes
+							</h4>
+						</div>
+						<div class="card-body">
+							<p class="card-text">Por supuesto, que no falte un módulo de mensajería privada</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
+
+		<!-- Si NO estamos logueados -->
+		<div class="row justify-content-center" *ngIf="!identity">
+			<div class="col-lg-3">
+				<a [routerLink]="['/register']">
+					<div class="card text-white bg-warning mb-3">
+						<div class="card-header">
+							<h4>
+								<span class="fas fa-user-plus"></span> Regístrarse
+							</h4>
+						</div>
+						<div class="card-body">
+							<p class="card-text">Rellena tus datos para formar parte de una gran comunidad</p>
+						</div>
+					</div>
+				</a>
+			</div>
+			<div class="col-lg-3">
+				<a [routerLink]="['/login']">
+					<div class="card text-white bg-success mb-3">						
+						<div class="card-header">
+							<h4>
+								<span class="fas fa-sign-in-alt"></span> Iniciar sesión
+							</h4>
+						</div>
+						<div class="card-body">
+							<p class="card-text">Entra con tu email y contraseña</p>
+						</div>
+					</div>
+				</a>
+			</div>
+		</div>
 	</div>
 </div>

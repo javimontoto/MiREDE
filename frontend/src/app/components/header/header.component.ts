@@ -3,16 +3,13 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { GLOBAL } from '../../services/global';
 
-
-
 @Component({
 	selector   : 'app-header',
 	templateUrl: './header.component.html',
-	styleUrls  : ['./header.component.css'],
-	providers  : [UserService]
+	styleUrls  : ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, DoCheck {
-	public title:string;
+	public title: string;
 	public url  : string;
 	public identity;
 

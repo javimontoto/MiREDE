@@ -4,8 +4,12 @@
 			<h1>{{title}}</h1>
 		</div>
 
+		<div class="loading"*ngIf="loading">
+			<img class="img-loading" src="../../assets/images/load2.gif" alt="Loading image" />
+		</div>
+
 		<!-- LISTADO -->
-		<div *ngIf="users; then hay; else nohay"></div>
+		<div *ngIf="users && !loading; then hay; else nohay"></div>
 		<ng-template #hay>
 			<div *ngFor="let user of users">
 				<div class="card bg-primary col-lg-12" *ngIf=" user._id != identity._id ">
@@ -31,18 +35,18 @@
 								(click)="followUser(user._id)">
 								<span class="fas fa-plus-square"></span>
 								Seguir
-								</button>
-								<button class="btn btn-danger btn-sm" *ngIf=" follows.indexOf(user._id) >= 0"
-									(click)="deleteFollowUser(user._id)">
-									<span class="fas fa-minus-square"></span>
-									No seguir
-								</button>
-							</div>
+							</button>
+							<button class="btn btn-danger btn-sm" *ngIf=" follows.indexOf(user._id) >= 0"
+								(click)="deleteFollowUser(user._id)">
+								<span class="fas fa-minus-square"></span>
+								No seguir
+							</button>
 						</div>
-						<!-- FIN SECCIÓN FOLLOWS -->
 					</div>
+					<!-- FIN SECCIÓN FOLLOWS -->
 				</div>
 			</div>
+		</div>
 
 		<!-- PAGINACIÓN -->
 		<div class="col-lg-12">
@@ -59,18 +63,18 @@
 			</ul>
 		</div>
 		<!-- FIN PAGINACIÓN -->
-		</ng-template>
-		<ng-template #nohay>
-			<div class="card bg-primary border-danger col-lg-12">
-				<div class="card-header"><h4 class="user-name text-yellow">No hay más gente!!!</h4></div>
-				<div class="card-body text-white">
-					<h5>No hay más usuarios en la plataforma</h5>
-				</div>
+	</ng-template>
+	<ng-template #nohay>
+		<div class="card bg-primary border-danger col-lg-12">
+			<div class="card-header"><h4 class="user-name text-yellow">No hay más gente!!!</h4></div>
+			<div class="card-body text-white">
+				<h5>No hay más usuarios en la plataforma</h5>
 			</div>
-		</ng-template>
-	</div>
+		</div>
+	</ng-template>
+</div>
 
-	<div class="general-container col-lg-4">
-		<app-sidebar></app-sidebar>
-	</div>
+<div class="general-container col-lg-4">
+	<app-sidebar></app-sidebar>
+</div>
 </div>

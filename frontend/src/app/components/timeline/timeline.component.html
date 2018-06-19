@@ -11,7 +11,12 @@
 				</button>
 			</div>
 		</div>
-		<div *ngIf="publications; then hay; else nohay"></div>
+		
+		<div class="loading" *ngIf="loading">
+			<img class="img-loading" src="../../assets/images/load2.gif" alt="Loading image" />
+		</div>
+
+		<div *ngIf="publications && !loading; then hay; else nohay"></div>
 
 		<ng-template #hay>
 			<div *ngFor="let publication of publications">
@@ -98,7 +103,7 @@
 	</div>
 
 	<div class="general-container col-lg-4">
-		<app-sidebar (publicationSended)="refreshPublications($event)"></app-sidebar>
+		<app-sidebar (publicationSended)="refreshPublications()"></app-sidebar>
 	</div>
 </div>
 

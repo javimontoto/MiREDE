@@ -19,17 +19,17 @@ export class PublicationsComponent implements OnInit {
 	public title       : string;
 	public url         : string;
 	public publications: Publication[];
+	public loading     : boolean;
+	public noMore      : boolean;			// true = no hay más páginas
 	public identity;
 	public token;
 	public status;
-	public page;
-	public pages;
+	public page;				// Página actual
+	public pages;				// Total de páginas
 	public total;
 	public items_per_page;
-	public noMore;
 	public showImage;
 	@Input() user_id: string;
-
 
 	constructor(
 		private _route             : ActivatedRoute,
@@ -37,17 +37,28 @@ export class PublicationsComponent implements OnInit {
 		private _userService       : UserService,
 		private _publicationService: PublicationService
 		) { 
-		this.title     = 'Timeline';
+		this.title     = 'Publicaciones';
 		this.identity  = _userService.getIdentity();
 		this.token     = _userService.getToken();
 		this.url       = GLOBAL.url;
 		this.page      = 1;
 		this.noMore    = false;
 		this.showImage = 0;
+		this.loading   = true;
 	}
 
 	ngOnInit() {
-		this.getPublications(this.user_id, this.page);
+		this.actualPage();
+	}
+
+	actualPage(){
+		this._route.params.subscribe(params => {
+			if(params['id']){
+				this.user_id = params['id'];
+				//console.log('Publications id: '+this.user_id);
+			}
+			this.getPublications(this.user_id, this.page);
+		});
 	}
 
 	/** Método para cargar las PUBLICACIONES. Si adding es true entonces añade páginas **/
@@ -55,6 +66,7 @@ export class PublicationsComponent implements OnInit {
 		this._publicationService.getPublicationsByUser(this.token, page, user_id).subscribe(
 			response => {
 				if(response.publications){
+					this.loading = false;
 					this.total = response.total_items;
 					this.pages = response.pages;
 					this.items_per_page = response.items_per_page;
@@ -78,6 +90,7 @@ export class PublicationsComponent implements OnInit {
 					}
 				}else{
 					this.status = 'error';
+					this.loading = false;
 				}
 
 			},
@@ -86,6 +99,7 @@ export class PublicationsComponent implements OnInit {
 				console.log(errorMessage);
 
 				if(errorMessage != null){
+					this.loading = false;
 					this.status = 'error';
 				}
 			}
@@ -96,6 +110,7 @@ export class PublicationsComponent implements OnInit {
 		this._publicationService.deletePublication(this.token, publication_id).subscribe(
 			response => {
 				this.refreshPublications();
+				this._userService.updateMyStats('publications',-1);
 			},
 			error => {
 				var errorMessage = <any>error;
@@ -126,7 +141,7 @@ export class PublicationsComponent implements OnInit {
 		this.showImage = 0;
 	}
 
-	refreshPublications(event=null){
+	refreshPublications(){
 		this.noMore = false;
 		this.getPublications(this.identity._id,1);
 	}

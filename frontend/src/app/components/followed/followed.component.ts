@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { User } from '../../models/user';
 import { Follow } from '../../models/follow';
@@ -7,27 +7,33 @@ import { UserService } from '../../services/user.service';
 import { FollowService } from '../../services/follow.service';
 import { GLOBAL } from '../../services/global';
 
+/* jQUERY */
+declare var jQuery:any;
+declare var $:any;
+
 @Component({
 	selector: 'app-followed',
 	templateUrl: './followed.component.html',
 	styleUrls: ['../users/users.component.css'] // --> Los estilos son los de Gente
 })
 export class FollowedComponent implements OnInit {
-	public title    : string;
-	public url      : string;
-	public total    : string;
-	public status   : string;
+	public title  : string;
+	public url    : string;
+	public total  : string;
+	public status : string;
+	public loading: boolean;
+	public noMore : boolean;	// true = no hay más páginas
 	public identity;
 	public token;
 	public page;			// Página actual
-	public next_page;		// Página siguiente
-	public prev_page;		// Página previa
 	public pages;			// Total de páginas
-	public paginas;			// Array con el número de páginas (para paginación)
-	public follows; 		// Ids de los usuarios que estamos siguiendo
+	public items_per_page;	// Número de elementos por página
+	/*public next_page;		// Página siguiente
+	public prev_page;		// Página previa
+	public paginas;			// Array con el número de páginas (para paginación)*/
+	public follows; 		// Ids de los usuarios que nos siguen
 	public followed; 		// Array de los usuarios a los que estamos siguiendo
-	public user_id;			// Usuario sobre el que mostramos resultado
-	
+	@Input() user_id: string;	// Usuario sobre el que mostramos resultado
 
 	constructor(
 		private _route        : ActivatedRoute,
@@ -35,11 +41,14 @@ export class FollowedComponent implements OnInit {
 		private _userService  : UserService,
 		private _followService: FollowService
 		) { 
-		this.title    = "Gente que me sigue";
+		this.title    = "Seguidores";
 		this.url      = GLOBAL.url;
 		this.identity = this._userService.getIdentity();
 		this.token    = this._userService.getToken();
-		this.user_id  = this.identity._id;
+		//this.user_id  = this.identity._id;
+		this.page     = 1;
+		this.noMore   = false;
+		this.loading  = true;
 	}
 
 	ngOnInit() {
@@ -50,8 +59,9 @@ export class FollowedComponent implements OnInit {
 		this._route.params.subscribe(params => {
 			if(params['id']){
 				this.user_id = params['id'];
+				//console.log('Followeds id: '+this.user_id);
 			}
-			let page = 1;
+			/*let page = 1;
 
 			if(params['page']) {
 				page = +params['page']; //--> con el signo +, convertimos a entero
@@ -61,31 +71,47 @@ export class FollowedComponent implements OnInit {
 			this.prev_page = page-1;
 			if(this.prev_page <= 0){
 				this.prev_page = 1;
-			}
+			}*/
 
 			// devolver listado de usuarios
-			this.getFollows(this.user_id, page);
+			this.getFollows(this.user_id, this.page);
 		});
 	}
 
-	getFollows(user_id, page){
+	getFollows(user_id, page, adding = false){
 		this._followService.getFollowed(this.token, user_id, page).subscribe(
 			response => {
-				if(response.user.nick && (this.identity._id != response.user._id)){
+				/*if(response.user.nick && (this.identity._id != response.user._id)){
 					this.title = 'Seguidores de '+response.user.nick;
-				}
+				}*/
 				if(!response.follows){
+					this.loading = false;
 					this.status = 'error';					
 				}else{
 					this.status = 'success';
+					this.loading = false;
 					this.total = response.total;
-					this.followed = response.follows;
+					this.follows = response.users_following;
+					this.items_per_page = response.items_per_page;
 					this.pages = response.pages;
-					this.follows = response.users_followed;
-					this.paginas = Array.from(Array(this.pages).keys());
+
+					if(!adding){
+						this.followed = response.follows;
+					}else{
+						var arrayA = this.followed; 	// lo que tengo hasta ahora
+						var arrayB = response.follows;	// la siguiente página que me devuelve
+						this.followed = arrayA.concat(arrayB);
+
+						$("html, body").animate({ scrollTop: $('#secction-user').prop("scrollHeight")},500);
+
+						if(page > this.pages){
+							this._router.navigate(['/home']);
+						}
+					}
+					/*this.paginas = Array.from(Array(this.pages).keys());
 					if(page > this.pages){ //--> si se pone una página incorrecta nos lleva a la primera
 						this._router.navigate(['/siguiendo', this.user_id, 1]);
-					}
+					}*/
 				}
 			},
 			error => {
@@ -93,6 +119,7 @@ export class FollowedComponent implements OnInit {
 				console.log(errorMessage);
 
 				if(errorMessage != null){
+					this.loading = false;
 					this.status = 'error';
 				}
 			}
@@ -110,6 +137,7 @@ export class FollowedComponent implements OnInit {
 				}else{
 					this.status = 'success';
 					this.follows.push(followed);
+					this._userService.updateMyStats('following',1);
 				}
 			},
 			error => {
@@ -130,6 +158,7 @@ export class FollowedComponent implements OnInit {
 				var search = this.follows.indexOf(followed);
 				if(search != -1){
 					this.follows.splice(search, 1);
+					this._userService.updateMyStats('following',-1);
 				}
 			},
 			error => {
@@ -143,11 +172,13 @@ export class FollowedComponent implements OnInit {
 			);
 	}
 
+	viewMore(){
+		this.page += 1;
 
-	// Output --> ponemos la etiqueta "@Output" y la propiedad que es el evento
-	@Output() sended = new EventEmitter();
-	sendPublication(event){
-		this.sended.emit({send:'true'});
+		if(this.page == this.pages){
+			this.noMore = true;
+		}
+
+		this.getFollows(this.user_id, this.page, true);
 	}
-
 }

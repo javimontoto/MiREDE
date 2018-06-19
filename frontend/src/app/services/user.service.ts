@@ -74,6 +74,24 @@ export class UserService {
 		return this.stats;
 	}
 
+	/** Método para ACTUALIZAR las estadísticas localmente **/
+	updateMyStats(stat, value){
+		let my_stats = this.getStats();
+		switch (stat) {
+			case "publications":
+			my_stats.publications = my_stats.publications+value;
+			break;
+			case "following":
+			my_stats.following = my_stats.following+value;
+			break;
+			case "followed":
+			my_stats.followed = my_stats.followed+value;
+			break;
+		}
+		console.log(my_stats);
+		localStorage.setItem('stats', JSON.stringify(my_stats));
+	}
+
 	/** Método que hace la petición para sacar del backend los CONTADORES **/
 	getCounters(user_id = null): Observable<any>{
 		let headers = new HttpHeaders().set('Content-Type', 'application/json').set('Authorization', this.getToken());

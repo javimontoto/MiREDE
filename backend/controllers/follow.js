@@ -74,14 +74,15 @@ function getFollowingUsers(req, res){
 			if(!user) return res.status(404).send({message: 'El usuario no existe!!'});
 			if(total == 0) return res.status(200).send({user : user});
 
-			followUserIds(user_id).then((value) => {
+			followUserIds(req.user.sub).then((value) => {
 				return res.status(200).send({
 					total : total,
 					user: user,
 					pages : Math.ceil(total/items_per_page),
 					follows : follows,
 					users_following : value.following,
-					users_follow_me : value.followed
+					users_follow_me : value.followed,
+					items_per_page: items_per_page
 				});
 			});
 		});
@@ -115,14 +116,15 @@ function getFollowedUsers(req, res){
 			if(!user) return res.status(404).send({message: 'El usuario no existe!!'});
 			if(total == 0) return res.status(200).send({user : user});
 
-			followUserIds(user_id).then((value) => {
+			followUserIds(req.user.sub).then((value) => {
 				return res.status(200).send({
 					total : total,
 					user: user,
 					pages : Math.ceil(total/items_per_page),
 					follows : follows,
 					users_following : value.following,
-					users_followed : value.followed
+					users_followed : value.followed,
+					items_per_page: items_per_page
 				});
 			});
 		});

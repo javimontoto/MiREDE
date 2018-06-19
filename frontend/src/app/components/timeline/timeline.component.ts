@@ -19,6 +19,7 @@ export class TimelineComponent implements OnInit {
 	public title       : string;
 	public url         : string;
 	public publications: Publication[];
+	public loading     : boolean;	
 	public identity;
 	public token;
 	public status;
@@ -42,6 +43,7 @@ export class TimelineComponent implements OnInit {
 		this.page      = 1;
 		this.noMore    = false;
 		this.showImage = 0;
+		this.loading   = true;
 	}
 
 	ngOnInit() {
@@ -53,6 +55,7 @@ export class TimelineComponent implements OnInit {
 		this._publicationService.getPublications(this.token, page).subscribe(
 			response => {
 				if(response.publications){
+					this.loading = false;
 					this.total = response.total_items;
 					this.pages = response.pages;
 					this.items_per_page = response.items_per_page;
@@ -75,6 +78,7 @@ export class TimelineComponent implements OnInit {
 						this._router.navigate(['/home']);
 					}
 				}else{
+					this.loading = false;
 					this.status = 'error';
 				}
 
@@ -85,6 +89,7 @@ export class TimelineComponent implements OnInit {
 
 				if(errorMessage != null){
 					this.status = 'error';
+					this.loading = false;
 				}
 			}
 			);
@@ -94,6 +99,7 @@ export class TimelineComponent implements OnInit {
 	deletePublication(publication_id){
 		this._publicationService.deletePublication(this.token, publication_id).subscribe(
 			response => {
+				this._userService.updateMyStats('publications',-1);
 				this.refreshPublications();
 			},
 			error => {
@@ -118,7 +124,7 @@ export class TimelineComponent implements OnInit {
 	}
 
 	/** Método que captura el evento enviado por sidebar **/
-	refreshPublications(event=null){
+	refreshPublications(){
 		this.noMore = false;
 		this.getPublications(1);
 	}

@@ -1,3 +1,21 @@
-.jumbotron {
-	background-color: #ffff0091 !important;
+.card {
+	height: 11rem;
+	display: block;
+}
+
+a {
+	text-decoration: none;
+	display: block;
+}
+
+.card:hover {
+	box-shadow: inset 9999px 9999px rgba(0,0,0,0.20);
+}
+
+.card-header {
+	background-color: rgba(0,0,0,0.15) !important;
+}
+
+.card-header h4{
+	margin-bottom: 0rem !important;
 }

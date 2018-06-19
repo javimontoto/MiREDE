@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, DoCheck } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Publication } from '../../models/publication';
 import { PublicationService } from '../../services/publication.service';
@@ -13,11 +13,11 @@ import { UploadService } from '../../services/upload.service';
 	styleUrls: ['./sidebar.component.css'],
 	providers: [UserService, PublicationService]
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, DoCheck {
 	public title: string;
 	public identity;
 	public token;
-	public stats;
+	public my_stats;
 	public url;
 	public status;
 	public publication: Publication;
@@ -35,12 +35,18 @@ export class SidebarComponent implements OnInit {
 		this.title = "Tus datos...";
 		this.identity = this._userService.getIdentity();
 		this.token = this._userService.getToken();
-		this.stats = this._userService.getStats();
+		this.my_stats = this._userService.getStats();
 		this.url = GLOBAL.url;
 		this.publication = new Publication('', '', '', '', this.identity._id);
 	}
 
-	ngOnInit() { }
+	ngOnInit() { 
+		//this.my_stats = this._userService.getStats();
+	}
+
+	ngDoCheck(){
+		this.my_stats = this._userService.getStats();
+	}
 
 	onSubmit(form, event){
 		this._publicationService.newPublication(this.token, this.publication).subscribe(
@@ -48,7 +54,8 @@ export class SidebarComponent implements OnInit {
 				if(response.publicationStored){
 					this.publication = response.publicationStored;
 					this.status = 'success';
-					this.stats.publications += 1;
+					this.my_stats.publications += 1;
+					this._userService.updateMyStats('publications',1);
 
 					if(this.filesToUpload && this.filesToUpload.length){
 						this._uploadService.makeFileRequest(this.url+'upload-image-pub/'+this.publication._id, [], this.filesToUpload, this.token, 'image').then((result: any) => {
@@ -80,7 +87,5 @@ export class SidebarComponent implements OnInit {
 	fileChangeEvent(fileInput: any){
 		this.filesToUpload = <Array<File>>fileInput.target.files;
 	}
-
-
 }
 

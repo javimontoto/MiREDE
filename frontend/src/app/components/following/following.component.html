@@ -1,5 +1,5 @@
-<div class="row">
-	<div class="general-container col-lg-8 ">
+<!-- <div class="row">
+	<div class="general-container col-lg-8 "> -->
 		<div class="section-header">
 			<h1>{{title}}</h1>
 		</div>
@@ -16,7 +16,7 @@
 						</div>
 
 						<div class="card-body col-lg-7">
-							<a [routerLink]="['/perfil', follow.followed._id]" class="card-link">
+							<a [routerLink]="['/perfil', follow.followed._id, 'publications']" class="card-link">
 								<h4 class="user-name text-yellow">{{follow.followed.name +' '+ follow.followed.surname}}</h4>
 							</a>
 							<h6 class="user-nick">{{follow.followed.nick}}</h6>
@@ -30,46 +30,53 @@
 								(click)="followUser(follow.followed._id)">
 								<span class="fas fa-plus-square"></span>
 								Seguir
-								</button>
-								<button class="btn btn-danger btn-sm" *ngIf=" follows.indexOf(follow.followed._id) >= 0"
-									(click)="deleteFollowUser(follow.followed._id)">
-									<span class="fas fa-minus-square"></span>
-									No seguir
-								</button>
-							</div>
+							</button>
+							<button class="btn btn-danger btn-sm" *ngIf=" follows.indexOf(follow.followed._id) >= 0"
+								(click)="deleteFollowUser(follow.followed._id)">
+								<span class="fas fa-minus-square"></span>
+								No seguir
+							</button>
 						</div>
-						<!-- FIN SECCIÓN FOLLOWS -->
 					</div>
+					<!-- FIN SECCIÓN FOLLOWS -->
 				</div>
 			</div>
+		</div>
 
-			<!-- PAGINACIÓN -->
-			<div class="col-lg-12">
-				<ul class="pagination center">
-					<li class="page-item" [ngClass]="{disabled : page <= 1 }">
-						<a class="page-link" [routerLink]="['/siguiendo/', user_id, prev_page]">&laquo; Anterior</a>
-					</li>
-					<li *ngFor="let pagina of paginas" class="page-item" [routerLinkActive]="['active']">
-						<a class="page-link" [routerLink]="['/siguiendo/', user_id, pagina+1]">{{pagina+1}}</a>
-					</li>			
-					<li class="page-item" [ngClass]="{disabled : pages == page }">
-						<a class="page-link" [routerLink]="['/siguiendo/', user_id, next_page]">Siguiente &raquo;</a>
-					</li>
-				</ul>
+		<!-- PAGINACIÓN -->
+
+		<p class="center">
+			<button class="btn btn-success" (click)="viewMore()" *ngIf="!noMore">
+				Ver más
+			</button>
+		</p>
+
+		<!-- <div class="col-lg-12">
+			<ul class="pagination center">
+				<li class="page-item" [ngClass]="{disabled : page <= 1 }">
+					<a class="page-link" [routerLink]="['/siguiendo/', user_id, prev_page]">&laquo; Anterior</a>
+				</li>
+				<li *ngFor="let pagina of paginas" class="page-item" [routerLinkActive]="['active']">
+					<a class="page-link" [routerLink]="['/siguiendo/', user_id, pagina+1]">{{pagina+1}}</a>
+				</li>			
+				<li class="page-item" [ngClass]="{disabled : pages == page }">
+					<a class="page-link" [routerLink]="['/siguiendo/', user_id, next_page]">Siguiente &raquo;</a>
+				</li>
+			</ul>
+		</div> -->
+		<!-- FIN PAGINACIÓN -->
+	</ng-template>
+	<ng-template #nohay>
+		<div class="card bg-primary border-danger col-lg-12">
+			<div class="card-header"><h4 class="user-name text-yellow">No hay seguimientos!!!</h4></div>
+			<div class="card-body text-white">
+				<h5>Parece que este usuario no sigue a nadie</h5>
 			</div>
-			<!-- FIN PAGINACIÓN -->
-		</ng-template>
-		<ng-template #nohay>
-			<div class="card bg-primary border-danger col-lg-12">
-				<div class="card-header"><h4 class="user-name text-yellow">No hay seguimientos!!!</h4></div>
-				<div class="card-body text-white">
-					<h5>Parece que este usuario no sigue a nadie</h5>
-				</div>
-			</div>
-		</ng-template>
-	</div>
+		</div>
+	</ng-template>
+	<!-- </div>
 
 	<div class="general-container col-lg-4">
 		<app-sidebar></app-sidebar>
 	</div>
-</div>
+</div> -->

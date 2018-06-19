@@ -1,5 +1,5 @@
-<div class="row">
-	<div class="general-container col-lg-8 ">
+<!-- <div class="row">
+	<div class="general-container col-lg-8 "> -->
 		<div class="section-header">
 			<h1>{{title}}</h1>
 		</div>
@@ -16,7 +16,7 @@
 						</div>
 
 						<div class="card-body col-lg-7">
-							<a [routerLink]="['/perfil', follow.user._id]" class="card-link">
+							<a [routerLink]="['/perfil', follow.user._id, 'publications']" class="card-link">
 								<h4 class="user-name text-yellow">{{follow.user.name +' '+ follow.user.surname}}</h4>
 							</a>
 							<h6 class="user-nick">{{follow.user.nick}}</h6>
@@ -26,12 +26,12 @@
 						<!-- SECCIÓN FOLLOWS -->
 						<div class="card-body col-lg-2">
 							<div class="follow-buttons" *ngIf=" follow.user._id != identity._id ">
-								<button class="btn btn-success btn-sm" *ngIf=" follows.indexOf(follow.user._id) < 0"
-								(click)="followUser(follow.user._id)">
-								<span class="fas fa-plus-square"></span>
-								Seguir
+								<button class="btn btn-success btn-sm" *ngIf=" follows && follows.indexOf(follow.user._id) < 0"
+									(click)="followUser(follow.user._id)">
+									<span class="fas fa-plus-square"></span>
+									Seguir
 								</button>
-								<button class="btn btn-danger btn-sm" *ngIf=" follows.indexOf(follow.user._id) >= 0"
+								<button class="btn btn-danger btn-sm" *ngIf=" follows && follows.indexOf(follow.user._id) >= 0"
 									(click)="deleteFollowUser(follow.user._id)">
 									<span class="fas fa-minus-square"></span>
 									No seguir
@@ -67,9 +67,9 @@
 				</div>
 			</div>
 		</ng-template>
-	</div>
+	<!-- </div>
 
 	<div class="general-container col-lg-4">
 		<app-sidebar></app-sidebar>
 	</div>
-</div>
+</div> -->

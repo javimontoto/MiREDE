@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { User } from '../../models/user';
 import { Follow } from '../../models/follow';
@@ -15,11 +15,12 @@ import { FollowService } from '../../services/follow.service';
 	styleUrls  : ['./users.component.css']
 })
 export class UsersComponent implements OnInit {
-	public title : string;
-	public total : string;
-	public status: string;
-	public url   : string;
-	public users : User[];	// Array con los usuarios
+	public title  : string;
+	public total  : string;
+	public status : string;
+	public url    : string;
+	public users  : User[];	// Array con los usuarios
+	public loading: boolean;
 	public identity;
 	public token;
 	public page;			// Página actual
@@ -39,6 +40,7 @@ export class UsersComponent implements OnInit {
 		this.identity = this._userService.getIdentity();
 		this.token    = this._userService.getToken();
 		this.url      = GLOBAL.url;
+		this.loading  = true;
 	}
 
 	ngOnInit() {
@@ -68,8 +70,10 @@ export class UsersComponent implements OnInit {
 		this._userService.getUsers(page).subscribe(
 			response => {
 				if(!response.users){
+					this.loading = false;
 					this.status = 'error';
 				}else{
+					this.loading = false;
 					this.status = 'success';
 					this.total = response.total;
 					this.users = response.users;
@@ -87,6 +91,7 @@ export class UsersComponent implements OnInit {
 				console.log(errorMessage);
 
 				if(errorMessage != null){
+					this.loading = false;
 					this.status = 'error';
 				}
 			}
@@ -104,6 +109,7 @@ export class UsersComponent implements OnInit {
 				}else{
 					this.status = 'success';
 					this.follows.push(followed);
+					this._userService.updateMyStats('following',1);
 				}
 			},
 			error => {
@@ -124,6 +130,7 @@ export class UsersComponent implements OnInit {
 				var search = this.follows.indexOf(followed);
 				if(search != -1){
 					this.follows.splice(search, 1);
+					this._userService.updateMyStats('following',-1);
 				}
 			},
 			error => {
@@ -137,10 +144,4 @@ export class UsersComponent implements OnInit {
 			);
 	}
 
-
-	// Output --> ponemos la etiqueta "@Output" y la propiedad que es el evento
-	@Output() sended = new EventEmitter();
-	sendPublication(event){
-		this.sended.emit({send:'true'});
-	}
 }
