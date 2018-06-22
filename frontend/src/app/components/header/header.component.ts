@@ -36,6 +36,7 @@ export class HeaderComponent implements OnInit, DoCheck {
 		this.identity = null;
 
 		this._router.navigate(['/']);
+		this.ngOnInit();
 	}
 
 }

@@ -13,7 +13,7 @@ export class MainComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		console.log('Main.component cargado...');
+		//console.log('Main.component cargado...');
 	}
 
 }

@@ -88,7 +88,6 @@ export class UserService {
 			my_stats.followed = my_stats.followed+value;
 			break;
 		}
-		console.log(my_stats);
 		localStorage.setItem('stats', JSON.stringify(my_stats));
 	}
 

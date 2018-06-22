@@ -41,7 +41,7 @@ export class SendedComponent implements OnInit {
 	}
 
 	ngOnInit() {
-		console.log('Sended.component cargado...');
+		//console.log('Sended.component cargado...');
 		this.actualPage();
 	}
 
@@ -68,7 +68,7 @@ export class SendedComponent implements OnInit {
 		this._messageService.getMessages(this.token, page).subscribe(
 			response => {
 				if(response.messages){
-					console.log(response);
+					//console.log(response);
 					this.status = 'success';
 					this.messages = response.messages;
 					this.pages = response.pages;

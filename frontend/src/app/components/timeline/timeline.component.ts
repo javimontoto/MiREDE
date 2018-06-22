@@ -124,7 +124,7 @@ export class TimelineComponent implements OnInit {
 	}
 
 	/** Método que captura el evento enviado por sidebar **/
-	refreshPublications(){
+	refreshPublications(event = null){
 		this.noMore = false;
 		this.getPublications(1);
 	}

@@ -29,7 +29,7 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {}
 
-	onSubmit(){
+	onSubmit(form){
 		this._userService.login(this.user).subscribe(
 			response => {
 				this.identity = response.user;

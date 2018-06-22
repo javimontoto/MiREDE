@@ -40,7 +40,7 @@ export class UserEditComponent implements OnInit {
 			response => {
 				if(!response.user){
 					this.status = 'error';
-					console.log(response);
+					//console.log(response);
 				}else{
 					this.status = 'success';
 					localStorage.setItem('identity', JSON.stringify(this.user));
