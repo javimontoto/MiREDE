@@ -34,9 +34,8 @@ export class HeaderComponent implements OnInit, DoCheck {
 	logout(){
 		localStorage.clear();
 		this.identity = null;
-
 		this._router.navigate(['/']);
-		this.ngOnInit();
+		location.reload(); // --> para forzar la recarga de home
 	}
 
 }

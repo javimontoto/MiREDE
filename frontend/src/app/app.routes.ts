@@ -29,7 +29,7 @@ const routes: Routes = [
 	{path: 'perfil/:id/:section', component: ProfileComponent, canActivate:[UserGuard]},
 	//{path: 'siguiendo/:id/:page', component: FollowingComponent, canActivate:[UserGuard]},
 	//{path: 'seguidores/:id/:page', component: FollowedComponent, canActivate:[UserGuard]},
-	{path: '**', redirectTo:'home'}		//--> cuando hay un error
+	{path: '**', redirectTo:'/home'}		//--> cuando hay un error
 ];
 
 export const appRoutingProviders: any[] = [];
