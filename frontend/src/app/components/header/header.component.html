@@ -7,25 +7,25 @@
 
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="nav navbar-nav ml-auto" *ngIf='identity'>
-				<li class="nav-item" [routerLinkActive]="['active']">
+				<li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target="#navbarResponsive">
 					<a class="nav-link" [routerLink]="['/home']">
 						<span class="fas fa-home"></span>
 						Inicio
 					</a>
 				</li>
-				<li class="nav-item" [routerLinkActive]="['active']">
+				<li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target="#navbarResponsive">
 					<a class="nav-link" [routerLink]="['/gente']">
 						<span class="fas fa-users"></span>
 						Gente
 					</a>
 				</li>
-				<li class="nav-item" [routerLinkActive]="['active']">
+				<li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target="#navbarResponsive">
 					<a class="nav-link" [routerLink]="['/timeline']">
 						<span class="fas fa-list-ul"></span>
 						Timeline
 					</a>
 				</li>
-				<li class="nav-item" [routerLinkActive]="['active']">
+				<li class="nav-item" [routerLinkActive]="['active']" data-toggle="collapse" data-target="#navbarResponsive">
 					<a class="nav-link" [routerLink]="['/mensajes']">
 						<span class="fas fa-envelope"></span>
 						Mensajes
@@ -40,7 +40,7 @@
 						<span class="caret"></span>						
 					</a>
 
-					<div class="dropdown-menu">
+					<div class="dropdown-menu" data-toggle="collapse" data-target="#navbarResponsive">
 						<a class="dropdown-item" [routerLink]="['/perfil', identity._id]">
 							<span class="far fa-user-circle"></span>
 							Mi perfil
