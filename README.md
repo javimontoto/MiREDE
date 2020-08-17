@@ -1,10 +1,6 @@
 # MiREDE
 Red Social del estilo de Twitter con MEAN Stack (MongoDB, Express, Angular y Node.js)
 
-## Web
-
-[Entrar en MiREDE](http://52.14.220.80/)
-
 ## Características
 
 * Registrarnos y loguearnos en la plataforma.
@@ -30,4 +26,4 @@ Red Social del estilo de Twitter con MEAN Stack (MongoDB, Express, Angular y Nod
 
 ## Autor
 
-* **Javi Montoto** - [javimontoto](https://github.com/javimontoto)
+* **Javi Montoto** - [javimontoto](https://www.javimontoto.com)
